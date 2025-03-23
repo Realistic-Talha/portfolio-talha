@@ -7,21 +7,14 @@ try {
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  eslint: {
-    ignoreDuringBuilds: true,
-  },
-  typescript: {
-    ignoreBuildErrors: true,
-  },
+  output: 'export',  // Enable static exports
   images: {
-    unoptimized: true,
+    unoptimized: true, // Required for static export
   },
-  experimental: {
-    webpackBuildWorker: true,
-    parallelServerBuildTraces: true,
-    parallelServerCompiles: true,
-  },
-}
+  // Use this if you're deploying to a subdirectory (username.github.io/portfolio)
+  basePath: process.env.NODE_ENV === 'production' ? '/portfolio-website' : '',
+  trailingSlash: true,
+};
 
 mergeConfig(nextConfig, userConfig)
 

@@ -28,11 +28,14 @@ jobs:
           cache: npm
       
       - name: Install dependencies
-        # Added --legacy-peer-deps flag to solve dependency conflicts
-        run: npm ci --legacy-peer-deps
+        # Modified to use npm install with several flags to handle dependency issues
+        run: npm install --no-fund --no-audit --force
       
       - name: Build
         run: npm run build
+        env:
+          # Add any environment variables needed for the build
+          NODE_OPTIONS: "--max_old_space_size=4096"
       
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3

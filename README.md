@@ -1,3 +1,11 @@
+# Portfolio Website
+
+This is my personal portfolio website showcasing my projects and skills.
+
+## Deployment
+
+This site is deployed on GitHub Pages.
+
 # Modern Developer Portfolio
 
 ![Portfolio Banner](https://via.placeholder.com/1200x600/5D3FD3/FFFFFF/?text=Muhammad+Talha+Rana+Portfolio)

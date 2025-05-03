@@ -30,6 +30,7 @@
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.0",
     "cmdk": "^0.2.1",
+    "embla-carousel-react": "^8.6.0",
     "framer-motion": "^10.18.0",
     "input-otp": "^0.2.1",
     "lucide-react": "^0.309.0",

@@ -1,8 +1,8 @@
 "use client"
 
 import { cn } from "@/lib/utils"
-import { motion, stagger, useAnimate, useInView } from "framer-motion"
-import { useEffect } from "react"
+import { motion, useAnimate, useInView } from "framer-motion"
+import { useEffect, useState } from "react"
 
 type TypewriterProps = {
   words: {
@@ -20,48 +20,55 @@ export const TypewriterEffect = ({
 }: TypewriterProps) => {
   const [scope, animate] = useAnimate()
   const isInView = useInView(scope)
+  const [currentIndex, setCurrentIndex] = useState(0)
+  const [displayText, setDisplayText] = useState("")
+  const [phase, setPhase] = useState<'typing' | 'deleting'>('typing')
   
   useEffect(() => {
-    if (isInView) {
-      animate(
-        "span",
-        {
-          opacity: 1,
-        },
-        {
-          duration: 0.25,
-          delay: stagger(0.1),
-        }
-      )
+    if (!isInView) return;
+    
+    let timeout: NodeJS.Timeout;
+    
+    if (phase === 'typing') {
+      if (displayText === words[currentIndex].text) {
+        // Wait before starting to delete
+        timeout = setTimeout(() => {
+          setPhase('deleting');
+        }, 2000);
+      } else {
+        // Add next character
+        timeout = setTimeout(() => {
+          setDisplayText(words[currentIndex].text.substring(0, displayText.length + 1));
+        }, 150);
+      }
+    } else {
+      if (displayText === "") {
+        // Move to next word
+        setPhase('typing');
+        setCurrentIndex((currentIndex + 1) % words.length);
+      } else {
+        // Remove last character
+        timeout = setTimeout(() => {
+          setDisplayText(displayText.substring(0, displayText.length - 1));
+        }, 100);
+      }
     }
-  }, [isInView, animate])
-
-  const renderWords = () => {
-    return (
-      <motion.div ref={scope} className="inline">
-        {words.map((word, idx) => {
-          return (
-            <div key={`word-${idx}`} className="inline-block">
-              {word.text.split("").map((char, index) => (
-                <motion.span
-                  initial={{ opacity: 0 }}
-                  key={`char-${index}`}
-                  className={cn(`opacity-0 inline-block`, word.className)}
-                >
-                  {char}
-                </motion.span>
-              ))}
-              &nbsp;
-            </div>
-          )
-        })}
-      </motion.div>
-    )
-  }
-
+    
+    return () => clearTimeout(timeout);
+  }, [isInView, displayText, currentIndex, phase, words]);
+  
   return (
     <div className={cn("flex items-center", className)}>
-      {renderWords()}
+      <div ref={scope} className="inline-block">
+        <motion.span 
+          className={words[currentIndex].className}
+          initial={{ opacity: 0.5 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 0.3 }}
+        >
+          {displayText}
+        </motion.span>
+      </div>
       <motion.span
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
@@ -71,7 +78,7 @@ export const TypewriterEffect = ({
           repeatType: "reverse",
         }}
         className={cn(
-          "inline-block h-6 w-[2px] bg-primary rounded-full",
+          "inline-block h-6 w-[2px] bg-primary rounded-full ml-1",
           cursorClassName
         )}
       ></motion.span>

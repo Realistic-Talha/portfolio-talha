@@ -1,10 +1,10 @@
 "use client"
 
-import { useState, useRef, useEffect } from "react"
+import { useState, useRef, useEffect, useMemo } from "react"
 import Image from "next/image"
 import Link from "next/link"
-import { motion, useInView } from "framer-motion"
-import { ArrowUpRight, Github, ExternalLink, Filter } from "lucide-react"
+import { motion, AnimatePresence, useInView } from "framer-motion"
+import { ArrowUpRight, Github, ExternalLink, Filter, Star, BadgeCheck, Info, X } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { ProjectCard } from "@/components/project-card"
 import { Input } from "@/components/ui/input"
@@ -19,75 +19,65 @@ import {
 const projects = [
   {
     id: 1,
-    title: "Spotify Data Visualizer",
+    title: "2D Chess Game",
     description:
-      "A web app for visualizing personalized Spotify data. View your top artists, top tracks, and detailed audio information with interactive charts.",
-    image: "/project-screenshot.png",
-    category: "web",
-    technologies: ["React", "Node.js", "Spotify API", "Tailwind CSS", "Chart.js"],
+      "A desktop-based chess game implemented using C++ and SFML with object-oriented principles. Features include standard piece movement validation, turn-based gameplay logic, and checkmate detection with a smooth graphical user interface.",
+    image: "/chess.png",
+    category: "desktop",
+    technologies: ["C++", "SFML", "OOP", "Game Development", "GUI Design"],
     demoUrl: "#",
     codeUrl: "#",
-    featured: true,
   },
   {
     id: 2,
-    title: "Task Management App",
-    description: "A productivity app to help users organize tasks, set priorities, and track progress with real-time updates and collaboration features.",
-    image: "/placeholder.svg?height=400&width=600",
-    category: "mobile",
-    technologies: ["Flutter", "Firebase", "Provider", "Material UI"],
-    demoUrl: "#",
-    codeUrl: "#",
+    title: "CyberKit Pro",
+    description: "A comprehensive cybersecurity toolkit combining frontend and backend technologies. Includes tools like port scanner, hash generator, log analyzer, password cracker, web crawler, and phishing detector with an intuitive interface.",
+    image: "/cyber.png",
+    category: "web",
+    technologies: ["HTML", "CSS", "JavaScript", "Python", "Cybersecurity"],
+    demoUrl: "https://cyberkit-pro.vercel.app/",
+    codeUrl: "https://github.com/Realistic-Talha/cyberkit-pro",
   },
   {
     id: 3,
-    title: "E-commerce Redesign",
+    title: "UniBuzz",
     description:
-      "A complete redesign of an e-commerce platform focusing on user experience and conversion optimization with A/B testing results showing 35% increased engagement.",
-    image: "/placeholder.svg?height=400&width=600",
-    category: "design",
-    technologies: ["Figma", "Adobe XD", "Illustrator", "Prototyping"],
+      "A community-focused mobile platform for university students built with Flutter and Firebase. Enables students to share updates, post campus events, and engage socially within their university environment with real-time notifications.",
+    image: "/unibuzz.png",
+    category: "mobile",
+    technologies: ["Flutter", "Firebase", "Dart", "Cloud Functions", "Authentication"],
     demoUrl: "#",
-    codeUrl: "#",
+    codeUrl: "https://github.com/Realistic-Talha/unibuzz_community",
+    featured: true,
   },
   {
     id: 4,
-    title: "Weather Dashboard",
-    description: "A weather application that provides real-time forecasts and historical weather data visualization with interactive maps and alerts.",
-    image: "/placeholder.svg?height=400&width=600",
+    title: "The Digitalising",
+    description: "A modern, fully responsive website designed for a digital solutions agency. Features sleek animations, service showcases, and client engagement tools with optimized performance and accessibility.",
+    image: "/digitalising.png",
     category: "web",
-    technologies: ["React", "Chart.js", "Weather API", "Styled Components", "Mapbox"],
-    demoUrl: "#",
+    technologies: ["HTML", "CSS", "JavaScript", "Responsive Design", "UI/UX"],
+    demoUrl: "https://the-digitalising.vercel.app/",
     codeUrl: "#",
     featured: true,
   },
   {
     id: 5,
-    title: "Fitness Tracker",
-    description: "A mobile application for tracking workouts, nutrition, and health metrics with personalized insights and progress visualization.",
-    image: "/placeholder.svg?height=400&width=600",
-    category: "mobile",
-    technologies: ["Flutter", "Firebase", "Health API", "BLoC Pattern"],
-    demoUrl: "#",
-    codeUrl: "#",
-  },
-  {
-    id: 6,
-    title: "Portfolio Website",
-    description: "A personal portfolio website showcasing projects and skills with dark/light mode, animations, and responsive design.",
-    image: "/placeholder.svg?height=400&width=600",
+    title: "Document Signing Dashboard",
+    description: "A React and TypeScript web application for secure document uploads and digital signatures. Features a clean UI, efficient file handling system, and real-time interaction for signing documents electronically.",
+    image: "/dashboard.png",
     category: "web",
-    technologies: ["Next.js", "Tailwind CSS", "Framer Motion", "TypeScript"],
-    demoUrl: "#",
+    technologies: ["React", "TypeScript", "Node.js", "PDF.js", "Authentication"],
+    demoUrl: "https://document-dashboard.vercel.app/dashboard",
     codeUrl: "#",
-  },
+  }
 ]
 
 const categories = [
   { id: "all", label: "All Projects" },
   { id: "web", label: "Web" },
   { id: "mobile", label: "Mobile" },
-  { id: "design", label: "UI/UX" },
+  { id: "desktop", label: "Desktop" },
 ]
 
 export function ProjectsSection() {
@@ -96,6 +86,37 @@ export function ProjectsSection() {
   const [sortBy, setSortBy] = useState("newest")
   const ref = useRef(null)
   const isInView = useInView(ref, { once: true, margin: "-100px" })
+
+  // State to manage popups for unavailable resources
+  const [popup, setPopup] = useState<{
+    visible: boolean;
+    message: string;
+    position: { x: number; y: number };
+  }>({
+    visible: false,
+    message: "",
+    position: { x: 0, y: 0 }
+  });
+
+  // Function to handle unavailable resources
+  const handleUnavailableResource = (e: React.MouseEvent, message: string) => {
+    e.preventDefault();
+    setPopup({
+      visible: true,
+      message,
+      position: { x: e.clientX, y: e.clientY }
+    });
+
+    // Hide popup after 3 seconds
+    setTimeout(() => {
+      setPopup(prev => ({ ...prev, visible: false }));
+    }, 3000);
+  };
+
+  // Close popup manually
+  const closePopup = () => {
+    setPopup(prev => ({ ...prev, visible: false }));
+  };
 
   // Filter and sort projects
   const filteredProjects = projects
@@ -116,30 +137,322 @@ export function ProjectsSection() {
   const featuredProjects = filteredProjects.filter(project => project.featured)
   const regularProjects = filteredProjects.filter(project => !project.featured)
 
+  // Floating particles for background (hydration-safe)
+  const [particles, setParticles] = useState<{top: number, left: number, size: number, color: string, delay: number}[]>([])
+  useEffect(() => {
+    setParticles(
+      Array.from({ length: 12 }).map((_, i) => ({
+        top: 10 + (i * 7) % 80,
+        left: 5 + (i * 13) % 90,
+        size: i % 3 === 0 ? 14 : 8,
+        color: i % 2 === 0 ? "rgba(139,92,246,0.18)" : "rgba(59,130,246,0.13)",
+        delay: i * 0.4,
+      }))
+    )
+  }, [])
+
+  // Animation variants
+  const sectionVariants = {
+    hidden: { opacity: 0, y: 60 },
+    visible: { opacity: 1, y: 0, transition: { duration: 0.7, when: "beforeChildren", staggerChildren: 0.12 } }
+  }
+  const cardVariants = {
+    hidden: { opacity: 0, y: 60, scale: 0.96 },
+    visible: { opacity: 1, y: 0, scale: 1, transition: { type: "spring", stiffness: 80, damping: 18 } },
+    exit: { opacity: 0, y: 60, scale: 0.96, transition: { duration: 0.3 } }
+  }
+
+  // Enhanced ProjectRow: alternate image/content direction for cross-directional layout
+  function ProjectRow({ project, index, featured }: { project: any; index: number; featured?: boolean }) {
+    // Alternate direction: even rows image left, odd rows image right
+    const isReverse = index % 2 === 1
+
+    // Check if demo or code is available
+    const isDemoAvailable = project.demoUrl !== "#";
+    const isCodeAvailable = project.codeUrl !== "#";
+
+    return (
+      <motion.div
+        key={project.id}
+        initial={{ opacity: 0, y: 10 }}
+        whileInView={{ opacity: 1, y: 0, transition: { duration: 0.35, type: "tween" } }}
+        viewport={{ once: true, amount: 0.2 }}
+        layout={false}
+        className={`
+          group relative flex flex-col md:flex-row ${isReverse ? "md:flex-row-reverse" : ""}
+          items-center md:items-stretch gap-0 md:gap-0
+          rounded-3xl bg-gradient-to-br from-white/90 via-primary/10 to-purple-100/10 dark:from-background/90 dark:via-primary/10 dark:to-blue-900/10
+          shadow-xl border border-primary/10 overflow-visible
+          hover:shadow-[0_8px_40px_0_rgba(139,92,246,0.18)] transition-all duration-400
+          backdrop-blur-2xl
+          px-4 sm:px-6 py-6 sm:py-8 mx-auto
+        `}
+        style={{
+          backgroundBlendMode: "overlay",
+        }}
+      >
+        {/* Floating image, visually separated, always contained */}
+        <div className="relative flex-shrink-0 w-full md:w-[340px] min-h-[180px] sm:min-h-[220px] md:min-h-[260px] flex items-center justify-center z-30">
+          {/* Glow and shadow layers */}
+          <motion.div
+            className="absolute left-1/2 -translate-x-1/2 top-8 w-72 h-72 rounded-2xl shadow-2xl bg-gradient-to-br from-primary/10 via-purple-400/10 to-blue-400/10 blur-2xl opacity-60 pointer-events-none"
+            animate={{ opacity: [0.5, 0.8, 0.5], scale: [1, 1.04, 1] }}
+            transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}
+          />
+
+          {/* Image container with overflow-hidden and max-w */}
+          <motion.div
+            className="relative w-48 h-32 sm:w-60 sm:h-40 md:w-72 md:h-48 rounded-2xl shadow-xl border-4 border-white/40 dark:border-background/40 overflow-hidden z-20 bg-background"
+            style={{ willChange: "transform" }}
+            whileHover={{
+              y: -14,
+              scale: 1.07,
+              rotate: isReverse ? 4 : -4,
+              boxShadow: "0 32px 64px 0 rgba(139,92,246,0.20)",
+            }}
+            transition={{ type: "spring", stiffness: 120, damping: 18 }}
+          >
+            <Image
+              src={project.image}
+              alt={project.title}
+              fill
+              className="object-contain"  // Changed from object-cover to object-contain
+              sizes="(max-width: 768px) 100vw, 340px"
+              priority={index === 0}
+              style={{
+                zIndex: 20,
+                transition: "transform 0.5s cubic-bezier(.4,2,.3,1)",
+              }}
+            />
+            {/* Overlay shine effect */}
+            <motion.div
+              className="absolute inset-0 pointer-events-none"
+              initial={{ opacity: 0.12 }}
+              whileHover={{ opacity: 0.22 }}
+              transition={{ duration: 0.5 }}
+              style={{
+                background:
+                  "linear-gradient(120deg,rgba(139,92,246,0.10) 0%,rgba(59,130,246,0.08) 100%)",
+                zIndex: 25,
+              }}
+            />
+          </motion.div>
+          {/* Floating accent elements */}
+          <motion.div
+            className="absolute -bottom-4 left-1/2 -translate-x-1/2 w-36 h-8 bg-gradient-to-r from-primary/30 via-purple-400/20 to-blue-400/20 blur-2xl rounded-full z-10"
+            animate={{ scaleX: [1, 1.1, 1], opacity: [0.5, 0.7, 0.5] }}
+            transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
+          />
+          <motion.div
+            className="absolute top-4 right-4 w-8 h-8 rounded-full bg-primary/20 blur-lg z-10"
+            animate={{ y: [0, -10, 0], opacity: [0.3, 0.6, 0.3] }}
+            transition={{ duration: 7, repeat: Infinity, ease: "easeInOut" }}
+          />
+          {featured && (
+            <motion.div
+              className="absolute top-4 left-4 z-30"
+              initial={{ scale: 0, rotate: -45 }}
+              animate={{ scale: 1, rotate: 0 }}
+              transition={{ delay: 0.3 + index * 0.1, type: "spring", stiffness: 200 }}
+            >
+              <span className="inline-flex items-center gap-1 px-2 sm:px-3 py-1 rounded-full bg-gradient-to-r from-primary to-purple-500 text-white text-xs font-semibold shadow-lg">
+                <Star className="w-3 h-3 sm:w-4 sm:h-4" /> Featured
+              </span>
+            </motion.div>
+          )}
+        </div>
+        {/* Card content */}
+        <div className="flex-1 flex flex-col justify-between px-4 sm:px-8 py-6 sm:py-8 md:py-8 relative z-20 text-center md:text-left">
+          {/* Animated vertical accent bar on left/right for desktop */}
+          <motion.div
+            className={`hidden md:block absolute ${isReverse ? "right-0" : "left-0"} top-8 bottom-8 w-1 bg-gradient-to-b from-primary via-purple-500 to-blue-500 rounded-full opacity-70`}
+            initial={{ scaleY: 0 }}
+            whileInView={{ scaleY: 1 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.7, delay: 0.3 + index * 0.1 }}
+            style={{ originY: 0 }}
+          />
+          <div>
+            <div className="flex flex-wrap gap-1 sm:gap-2 mb-3 justify-center md:justify-start">
+              {project.technologies.map((tech: string, i: number) => (
+                <span
+                  key={i}
+                  className="px-1.5 sm:px-2 py-1 bg-gradient-to-r from-primary/10 via-purple-500/10 to-blue-500/10 text-xs rounded-full text-primary font-medium shadow-sm border border-primary/10"
+                >
+                  {tech}
+                </span>
+              ))}
+            </div>
+            <h3 className="text-xl sm:text-2xl md:text-3xl font-extrabold mb-2 text-gradient drop-shadow-lg tracking-tight">
+              {project.title}
+            </h3>
+            <p className="text-muted-foreground mb-4 sm:mb-6 text-sm sm:text-base leading-relaxed">{project.description}</p>
+          </div>
+          <div className="flex flex-wrap gap-3 mt-auto justify-center md:justify-start">
+            {project.demoUrl && (
+              isDemoAvailable ? (
+                <a
+                  href={project.demoUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-1.5 sm:gap-2 px-4 sm:px-6 py-1.5 sm:py-2 rounded-full bg-gradient-to-r from-primary to-blue-500 text-white text-sm font-semibold shadow-lg hover:scale-105 hover:shadow-xl transition"
+                >
+                  <ExternalLink className="w-3 h-3 sm:w-4 sm:h-4" />
+                  Demo
+                </a>
+              ) : (
+                <button
+                  onClick={(e) => handleUnavailableResource(e, "Demo is not available yet")}
+                  className="inline-flex items-center gap-1.5 sm:gap-2 px-4 sm:px-6 py-1.5 sm:py-2 rounded-full bg-gradient-to-r from-gray-400 to-gray-500 text-white text-sm font-semibold shadow-lg cursor-not-allowed opacity-80"
+                >
+                  <ExternalLink className="w-3 h-3 sm:w-4 sm:h-4" />
+                  Demo
+                </button>
+              )
+            )}
+            {project.codeUrl && (
+              isCodeAvailable ? (
+                <a
+                  href={project.codeUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-1.5 sm:gap-2 px-4 sm:px-6 py-1.5 sm:py-2 rounded-full bg-white/90 text-primary text-sm font-semibold shadow-lg border border-primary/20 hover:bg-primary hover:text-white transition"
+                >
+                  <Github className="w-3 h-3 sm:w-4 sm:h-4" />
+                  Code
+                </a>
+              ) : (
+                <button
+                  onClick={(e) => handleUnavailableResource(e, "Source code is private")}
+                  className="inline-flex items-center gap-1.5 sm:gap-2 px-4 sm:px-6 py-1.5 sm:py-2 rounded-full bg-white/90 text-gray-400 text-sm font-semibold shadow-lg border border-gray-300 cursor-not-allowed opacity-80"
+                >
+                  <Github className="w-3 h-3 sm:w-4 sm:h-4" />
+                  Private
+                </button>
+              )
+            )}
+          </div>
+        </div>
+        {/* Subtle floating star accent */}
+        <motion.div
+          className={`absolute bottom-6 ${isReverse ? "left-6" : "right-6"} z-10 hidden sm:block`}
+          animate={{
+            y: [0, -8, 0],
+            opacity: [0.5, 1, 0.5],
+            rotate: [0, 20, 0],
+            scale: [1, 1.2, 1],
+          }}
+          transition={{
+            duration: 7 + index,
+            repeat: Infinity,
+            ease: "easeInOut",
+            delay: index * 0.3,
+          }}
+        >
+          <Star className="w-6 h-6 text-primary/40 drop-shadow" />
+        </motion.div>
+      </motion.div>
+    )
+  }
+
   return (
-    <section id="projects" className="py-20 relative">
-      {/* Background elements */}
-      <div className="absolute inset-0 overflow-hidden">
-        <div className="absolute top-1/3 -left-20 w-80 h-80 bg-purple-600/10 rounded-full blur-[100px]"></div>
-        <div className="absolute bottom-1/3 -right-20 w-80 h-80 bg-blue-600/10 rounded-full blur-[100px]"></div>
+    <section id="projects" className="py-24 relative overflow-visible">
+      {/* Glowing animated background */}
+      <div className="absolute inset-0 overflow-hidden pointer-events-none z-0">
+        <motion.div
+          className="absolute top-1/4 -left-24 w-96 h-96 bg-primary/10 rounded-full blur-[120px]"
+          animate={{ scale: [1, 1.08, 1], opacity: [0.15, 0.25, 0.15] }}
+          transition={{ duration: 14, repeat: Infinity, ease: "easeInOut" }}
+        />
+        <motion.div
+          className="absolute bottom-1/4 -right-24 w-96 h-96 bg-purple-500/10 rounded-full blur-[120px]"
+          animate={{ scale: [1.1, 1, 1.1], opacity: [0.13, 0.22, 0.13] }}
+          transition={{ duration: 12, repeat: Infinity, ease: "easeInOut" }}
+        />
+        <div className="absolute left-0 right-0 top-0 h-0.5 bg-gradient-to-r from-transparent via-primary/60 to-transparent blur-[4px] opacity-70"></div>
+        <div className="absolute left-0 right-0 bottom-0 h-0.5 bg-gradient-to-r from-transparent via-primary/80 to-transparent blur-[8px] opacity-70"></div>
+        {/* Animated floating particles */}
+        {particles.map((p, i) => (
+          <motion.div
+            key={i}
+            className="absolute rounded-full"
+            style={{
+              top: `${p.top}%`,
+              left: `${p.left}%`,
+              width: `${p.size}px`,
+              height: `${p.size}px`,
+              background: p.color,
+              opacity: 0.7,
+              filter: "blur(1px)",
+            }}
+            animate={{
+              y: [0, -10, 0],
+              opacity: [0.7, 1, 0.7],
+              scale: [1, 1.2, 1],
+            }}
+            transition={{
+              duration: 6 + (i % 3),
+              repeat: Infinity,
+              repeatType: "mirror",
+              delay: p.delay,
+              ease: "easeInOut"
+            }}
+          />
+        ))}
       </div>
 
-      <div className="container mx-auto px-4 md:px-6 relative z-10">
+      <div className="container mx-auto px-4 md:px-6 relative z-20">
+        {/* Tag like "My Journey" - centered */}
+        <div className="flex justify-center">
+          <motion.div
+            initial={{ opacity: 0, y: -20, scale: 0.9 }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            transition={{ duration: 0.5, delay: 0.1 }}
+            className="inline-block px-3 py-1 rounded-full bg-primary/10 text-primary text-xs sm:text-sm font-medium mb-4 text-center shadow backdrop-blur-sm"
+          >
+            My Work
+          </motion.div>
+        </div>
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
-          transition={{ duration: 0.5 }}
+          variants={sectionVariants}
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, amount: 0.2 }}
           className="text-center max-w-3xl mx-auto mb-16"
         >
-          <h2 className="text-3xl md:text-4xl font-bold mb-4">My Recent Projects</h2>
-          <p className="text-muted-foreground text-lg mb-8">
-            Explore my latest work across web development, mobile apps, and UI/UX design.
+          <motion.h2
+            className="text-xl sm:text-2xl md:text-4xl font-bold mb-4"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.7, delay: 0.2 }}
+          >
+            My Recent<span className="text-gradient animate-gradient-move"> Projects</span>
+          </motion.h2>
+          <motion.div
+            className="mx-auto mt-2 mb-8 h-1 w-32 rounded-full bg-gradient-to-r from-primary via-purple-500 to-blue-500 shadow-lg"
+            initial={{ scaleX: 0 }}
+            whileInView={{ scaleX: 1 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.7, delay: 0.3 }}
+            style={{ originX: 0.5 }}
+          />
+          <motion.p
+            className="text-muted-foreground text-sm sm:text-base md:text-lg mb-8 px-4 sm:px-0"
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.7, delay: 0.4 }}
+          >
+            Explore my latest work across web development, mobile apps, and UI/UX design.<br className="hidden sm:block" />
             Each project represents a unique challenge and solution.
-          </p>
-
+          </motion.p>
           {/* Search and filter controls */}
-          <div className="flex flex-col md:flex-row gap-4 items-center justify-between mb-8">
-            <div className="w-full md:w-auto flex-1 max-w-md">
+          <motion.div
+            className="flex flex-col sm:flex-row gap-4 items-center justify-center sm:justify-between mb-8"
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.7, delay: 0.6 }}
+          >
+            <div className="w-full sm:w-auto flex-1 max-w-full sm:max-w-md">
               <Input
                 placeholder="Search projects..."
                 value={searchTerm}
@@ -147,12 +460,11 @@ export function ProjectsSection() {
                 className="w-full"
               />
             </div>
-            
-            <div className="flex gap-4 w-full md:w-auto">
+            <div className="flex flex-wrap gap-2 sm:gap-4 w-full sm:w-auto justify-center">
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
-                  <Button variant="outline" className="gap-2">
-                    <Filter className="h-4 w-4" />
+                  <Button variant="outline" className="gap-2 text-sm">
+                    <Filter className="h-3 w-3 sm:h-4 sm:w-4" />
                     Sort
                   </Button>
                 </DropdownMenuTrigger>
@@ -162,80 +474,156 @@ export function ProjectsSection() {
                   <DropdownMenuItem onClick={() => setSortBy("featured")}>Featured</DropdownMenuItem>
                 </DropdownMenuContent>
               </DropdownMenu>
-              
-              <div className="flex overflow-x-auto gap-2 pb-2 md:pb-0">
+              <div className="flex overflow-x-auto gap-1 sm:gap-2 pb-2 md:pb-0 w-full sm:w-auto justify-center">
                 {categories.map((category) => (
                   <Button
                     key={category.id}
                     onClick={() => setActiveCategory(category.id)}
                     variant={activeCategory === category.id ? "default" : "outline"}
                     size="sm"
-                    className="whitespace-nowrap"
+                    className={`whitespace-nowrap text-xs sm:text-sm px-2 sm:px-3 ${activeCategory === category.id ? "shadow-lg scale-105" : ""}`}
                   >
                     {category.label}
                   </Button>
                 ))}
               </div>
             </div>
-          </div>
+          </motion.div>
         </motion.div>
 
-        {/* Display "no projects found" message if needed */}
-        {filteredProjects.length === 0 && (
-          <div className="text-center py-12">
-            <p className="text-muted-foreground text-lg">No projects found matching your search criteria.</p>
-          </div>
-        )}
+        {/* No projects found */}
+        <AnimatePresence>
+          {filteredProjects.length === 0 && (
+            <motion.div
+              className="text-center py-12"
+              initial={{ opacity: 0, y: 30 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: 30 }}
+              transition={{ duration: 0.4 }}
+            >
+              <p className="text-muted-foreground text-lg">No projects found matching your search criteria.</p>
+            </motion.div>
+          )}
+        </AnimatePresence>
 
-        {/* Featured projects (larger cards) */}
-        {featuredProjects.length > 0 && (
-          <div className="mb-8">
-            <h3 className="text-xl font-semibold mb-6">Featured Projects</h3>
-            <div ref={ref} className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-12">
-              {featuredProjects.map((project, index) => (
-                <ProjectCard
-                  key={project.id}
-                  label={categories.find(c => c.id === project.category)?.label || project.category}
-                  title={project.title}
-                  description={project.description}
-                  imageUrl={project.image}
-                  projectUrl={project.demoUrl}
-                  githubUrl={project.codeUrl}
-                  technologies={project.technologies}
-                  featured={true}
-                />
-              ))}
-            </div>
-          </div>
-        )}
+        {/* Featured projects - one per row, modern card */}
+        <AnimatePresence>
+          {featuredProjects.length > 0 && (
+            <motion.div
+              className="mb-16 flex flex-col items-center"
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: true, amount: 0.2 }}
+              variants={sectionVariants}
+            >
+              <motion.h3
+                className="text-2xl font-bold mb-8 text-gradient tracking-tight flex items-center justify-center gap-2"
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.7, delay: 0.1 }}
+              >
+                <BadgeCheck className="w-6 h-6 text-primary animate-bounce" />
+                Featured Projects
+              </motion.h3>
+              <div className="space-y-14 w-full max-w-4xl mx-auto">
+                <AnimatePresence>
+                  {featuredProjects.map((project, index) => (
+                    <ProjectRow key={project.id} project={project} index={index} featured />
+                  ))}
+                </AnimatePresence>
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
 
-        {/* Regular projects */}
-        {regularProjects.length > 0 && (
-          <div>
-            <h3 className="text-xl font-semibold mb-6">All Projects</h3>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {regularProjects.map((project, index) => (
-                <ProjectCard
-                  key={project.id}
-                  label={categories.find(c => c.id === project.category)?.label || project.category}
-                  title={project.title}
-                  description={project.description}
-                  imageUrl={project.image}
-                  projectUrl={project.demoUrl}
-                  githubUrl={project.codeUrl}
-                  technologies={project.technologies}
-                />
-              ))}
-            </div>
-          </div>
-        )}
+        {/* Regular projects, one per row, modern card */}
+        <AnimatePresence>
+          {regularProjects.length > 0 && (
+            <motion.div
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: true, amount: 0.2 }}
+              variants={sectionVariants}
+              className="flex flex-col items-center"
+            >
+              <motion.h3
+                className="text-2xl font-bold mb-8 text-gradient tracking-tight flex items-center justify-center gap-2"
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.7, delay: 0.1 }}
+              >
+                <Star className="w-5 h-5 text-primary animate-spin-slow" />
+                All Projects
+              </motion.h3>
+              <div className="space-y-12 w-full max-w-4xl mx-auto">
+                <AnimatePresence>
+                  {regularProjects.map((project, index) => (
+                    <ProjectRow key={project.id} project={project} index={index} />
+                  ))}
+                </AnimatePresence>
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
 
-        <div className="mt-16 text-center">
-          <Button variant="gradient" size="lg" className="rounded-full">
-            View All Projects
+        {/* Call to action */}
+        <motion.div
+          className="mt-12 sm:mt-16 md:mt-20 text-center"
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.7, delay: 0.2 }}
+        >
+          <Button
+            variant="gradient"
+            size="lg"
+            className="rounded-full shadow-xl hover:scale-105 transition-transform relative overflow-hidden px-6 sm:px-8 md:px-10 py-3 sm:py-4 text-base sm:text-lg font-bold"
+            asChild
+          >
+            <Link href="#contact">
+              <span className="relative z-10 flex items-center gap-2">
+                <Star className="w-4 h-4 sm:w-5 sm:h-5 animate-pulse" />
+                View All Projects
+              </span>
+              <motion.span
+                className="absolute inset-0 bg-gradient-to-r from-primary/80 to-purple-600/80 z-0"
+                initial={{ x: '-100%' }}
+                whileHover={{ x: 0 }}
+                transition={{ duration: 0.3 }}
+              />
+            </Link>
           </Button>
-        </div>
+        </motion.div>
       </div>
+
+      {/* Popup for unavailable resources */}
+      <AnimatePresence>
+        {popup.visible && (
+          <motion.div
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: 10 }}
+            style={{
+              position: 'fixed',
+              top: popup.position.y - 70,
+              left: popup.position.x - 100,
+              zIndex: 100,
+              maxWidth: '90vw', // Prevent overflow outside viewport
+            }}
+            className="bg-background border border-primary/20 shadow-lg rounded-lg p-3 w-64"
+          >
+            <div className="flex items-center justify-between mb-2">
+              <div className="flex items-center gap-2">
+                <Info className="w-4 h-4 text-primary" />
+                <span className="font-semibold text-sm">Notice</span>
+              </div>
+              <button onClick={closePopup} className="text-muted-foreground hover:text-foreground">
+                <X className="w-4 h-4" />
+              </button>
+            </div>
+            <p className="text-sm text-muted-foreground">{popup.message}</p>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </section>
   )
 }

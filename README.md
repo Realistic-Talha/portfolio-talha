@@ -1,8 +1,8 @@
 # Modern Developer Portfolio
 
-![Portfolio Banner](https://via.placeholder.com/1200x600/5D3FD3/FFFFFF/?text=Talha+Yameen+Portfolio)
+![Portfolio Banner](https://via.placeholder.com/1200x600/5D3FD3/FFFFFF/?text=Muhammad+Talha+Rana+Portfolio)
 
-A modern, responsive developer portfolio built with Next.js, Tailwind CSS, and Framer Motion. This portfolio showcases my projects, skills, and experience with smooth animations and a clean design.
+A modern, responsive developer portfolio built with Next.js, Tailwind CSS, and Framer Motion. This portfolio showcases the projects, skills, and experience of Muhammad Talha Rana—a dedicated and versatile Frontend Developer based in Islamabad, Pakistan—featuring smooth animations and a clean design.
 
 ## ✨ Features
 
@@ -151,19 +151,36 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ## 👨‍💻 About Me
 
-I'm Talha Yameen, a full-stack developer passionate about creating beautiful, functional, and user-centered digital experiences. I specialize in building modern web applications with React, Next.js, and related technologies.
+I'm Muhammad Talha Rana, a dedicated and versatile Frontend Developer based in Islamabad, Pakistan, with expertise in both web and mobile application development. I specialize in building dynamic, user-centric applications using HTML, CSS, JavaScript, TypeScript, React, Next.js, WordPress, Webflow, Flutter, Python, MongoDB, and MySQL. With a strong focus on performance optimization, responsive design, and seamless UI/UX, I consistently deliver polished, scalable, and intuitive digital solutions. My technical competencies include Microsoft Office, frontend and backend development, database management, version control (e.g., Git), Firebase integration, dynamic application architecture, and modern development frameworks.
+
+**Education:**
+- BS Computer Science, Air University, Islamabad (2023–Present)
+- FSc (Pre-Engineering), Govt. Post Graduate College, Rajanpur (2020–2022)
+- Matriculation, District Public School, Rajanpur (2018–2020)
+
+**Experience:**
+- Web Developer, DEVCIR (Dec 2024–Present): Design and maintain interactive web applications using HTML, CSS, JavaScript, and Webflow to elevate user experience and functionality.
+
+**Skills:** HTML, CSS, JavaScript, TypeScript, React, Next.js, WordPress, Flutter, Firebase, Python, MongoDB, MySQL, Microsoft Office, Responsive Design, Version Control (Git), UI/UX, Webflow, Database Management
+
+**Projects:**
+- **2D Chess Game:** Built with C++ and SFML, featuring OOP-based modular design and GUI.
+- **CyberKit Pro:** Comprehensive cybersecurity toolkit (frontend: HTML/CSS/JS, backend: Python) with tools like port scanner, hash generator, log analyzer, password cracker, web crawler, and phishing detector.
+- **UniBuzz:** Flutter-based social platform integrated with Firebase for university students to share updates, post events, and interact within a community.
+- **Digitalising:** Fully responsive agency website designed to represent a digital solutions brand with a modern layout and smooth interactions.
+- **Document Signing Dashboard:** Developed in React and TypeScript, allowing users to upload, manage, and digitally sign documents securely via a clean and efficient interface.
 
 ## 📬 Contact
 
 Have questions, feedback, or want to work together? Reach out to me:
 
-- **GitHub**: [yourusername](https://github.com/yourusername)
-- **LinkedIn**: [Talha Yameen](https://linkedin.com/in/yourusername)
-- **Email**: your.email@example.com
-- **Portfolio**: [yourdomain.com](https://yourdomain.com)
+- **GitHub**: [Realistic-Talha](https://github.com/Realistic-Talha)
+- **LinkedIn**: [Muhammad Talha Rana](https://www.linkedin.com/in/realistictalha/)
+- **Email**: [talhayameen98@gmail.com](mailto:talhayameen98@gmail.com)
+- **Phone**: +92317-6442326
 
 ---
 
 <p align="center">
-  Made with ❤️ by Talha Yameen
+  Made with ❤️ by Muhammad Talha Rana
 </p>

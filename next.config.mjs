@@ -11,8 +11,6 @@ const nextConfig = {
   images: {
     unoptimized: true, // Required for static export
   },
-  // Use this if you're deploying to a subdirectory (username.github.io/portfolio)
-  basePath: process.env.NODE_ENV === 'production' ? '/portfolio-website' : '',
   trailingSlash: true,
 };
 

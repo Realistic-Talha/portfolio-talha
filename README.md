@@ -2,10 +2,6 @@
 
 This is my personal portfolio website showcasing my projects and skills.
 
-## Deployment
-
-This site is deployed on GitHub Pages.
-
 # Modern Developer Portfolio
 
 ![Portfolio Banner](https://via.placeholder.com/1200x600/5D3FD3/FFFFFF/?text=Muhammad+Talha+Rana+Portfolio)
@@ -99,12 +95,9 @@ portfolio/
 │   └── theme-provider.tsx
 ├── lib/                # Utility functions
 ├── public/             # Static assets
-├── .github/            # GitHub config files
-│   └── ISSUE_TEMPLATE/ # Issue templates
 ├── LICENSE             # MIT License
 ├── README.md           # This file
 └── ...                 # Config files
-
 
 ## 🎯 Key Components
 

@@ -38,7 +38,6 @@ A modern, responsive developer portfolio built with Next.js, Tailwind CSS, and F
   <p><em>Hero Section</em></p>
   
   <img src="https://github.com/user-attachments/assets/20091c81-3d02-4a8b-a17e-ebb6987dfe16" />
-" />
   <p><em>Projects Section</em></p>
   
   <img src="https://github.com/user-attachments/assets/401ad725-f2cb-4f33-a778-d5e316258dea" alt="Light Mode" width="80%" />

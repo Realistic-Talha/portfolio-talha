@@ -4,8 +4,8 @@ This is my personal portfolio website showcasing my projects and skills.
 
 # Modern Developer Portfolio
 
-![Portfolio Banner]("<img width="1919" height="1079" alt="image" src="https://github.com/user-attachments/assets/728646b9-aceb-49ef-a405-b5bfc5a75f26" />
-)
+![Portfolio Banner](https://github.com/user-attachments/assets/728646b9-aceb-49ef-a405-b5bfc5a75f26)
+
 
 A modern, responsive developer portfolio built with Next.js, Tailwind CSS, and Framer Motion. This portfolio showcases the projects, skills, and experience of Muhammad Talha Rana—a dedicated and versatile Frontend Developer based in Islamabad, Pakistan—featuring smooth animations and a clean design.
 
@@ -34,16 +34,13 @@ A modern, responsive developer portfolio built with Next.js, Tailwind CSS, and F
 ## 📸 Screenshots
 
 <div align="center">
-  <img src="<img width="1919" height="1079" alt="image" src="https://github.com/user-attachments/assets/027d427a-a52a-4617-b3f6-0aee651dc041"" />
-" alt="Hero Section" width="80%" />
+  <img src="https://github.com/user-attachments/assets/027d427a-a52a-4617-b3f6-0aee651dc041" alt="Hero Section" width="80%" />
   <p><em>Hero Section</em></p>
   
-  <img src="<img width="1919" height="1079" alt="image" src="https://github.com/user-attachments/assets/d6de3715-459c-4315-ab5c-cd80946d467b" />
-" />
+  <img src="https://github.com/user-attachments/assets/d6de3715-459c-4315-ab5c-cd80946d467b" alt="Projects Section" width="80%" />
   <p><em>Projects Section</em></p>
   
-  <img src="<img width="1919" height="1079" alt="image" src="https://github.com/user-attachments/assets/401ad725-f2cb-4f33-a778-d5e316258dea" />
-" />
+  <img src="https://github.com/user-attachments/assets/401ad725-f2cb-4f33-a778-d5e316258dea" alt="Light Mode" width="80%" />
   <p><em>Light Mode</em></p>
 </div>
 

@@ -6,7 +6,7 @@ export const SequentialTypewriter = () => {
   const words = [
     { text: "Build.", className: "text-xl font-bold text-blue-500" },
     { text: "Design.", className: "text-xl font-bold text-green-500" },
-    { text: "Develop.", className: "text-xl font-bold text-purple-500" },
+    { text: "Develop.", className: "text-xl font-bold text-blue-500" },
     { text: "Deploy.", className: "text-xl font-bold text-amber-500" },
   ]
 

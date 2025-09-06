@@ -1,6 +1,6 @@
 "use client"
 
-import { useEffect, useState } from "react"
+import { useEffect, useState, useRef, useCallback } from "react"
 import { motion } from "framer-motion"
 import { ArrowRight, Github, Linkedin, Mail, ChevronDown, Mouse, Laptop, FileCode, Code } from "lucide-react"
 import { Button } from "@/components/ui/button"
@@ -8,6 +8,9 @@ import { TypewriterEffect } from "@/components/ui/typewriter-effect"
 import { HeroParticles } from "@/components/hero-particles"
 import { SequentialTypewriter } from "@/components/ui/sequential-typewriter"
 import { MouseScrollIndicator } from "@/components/ui/mouse-scroll-indicator"
+import { usePerformanceOptimization } from "@/hooks/use-performance-optimization"
+import { useOptimizedScroll } from "@/hooks/use-performance-optimization"
+import { smoothScrollToId } from "@/lib/smooth-scroll"
 
 // Custom Upwork icon
 const UpworkIcon = () => (
@@ -24,26 +27,78 @@ const UpworkIcon = () => (
 
 export function HeroSection() {
   const [scrollY, setScrollY] = useState(0)
+  const { getAnimationSettings, performanceConfig } = usePerformanceOptimization()
+  const animationSettings = getAnimationSettings()
   
-  useEffect(() => {
-    const handleScroll = () => {
-      setScrollY(window.scrollY)
-    }
-    window.addEventListener("scroll", handleScroll)
-    return () => window.removeEventListener("scroll", handleScroll)
+  // Optimized scroll handling
+  useOptimizedScroll((scrollY) => {
+    setScrollY(scrollY)
+  })
+
+  const scrollToProjects = useCallback(() => {
+    smoothScrollToId("projects", 800, -80)
+  }, [])
+  
+  const scrollToContact = useCallback(() => {
+    smoothScrollToId("contact", 800, -80)
   }, [])
 
-  const scrollToProjects = () => {
-    const projectsSection = document.querySelector("section#projects")
-    if (projectsSection) {
-      projectsSection.scrollIntoView({ behavior: 'smooth' })
+  // Optimized animation variants
+  const containerVariants = {
+    hidden: { opacity: 0 },
+    visible: { 
+      opacity: 1,
+      transition: {
+        duration: 0.8,
+        ease: animationSettings.ease,
+        staggerChildren: 0.1
+      }
     }
   }
-  
-  const scrollToContact = () => {
-    const contactSection = document.querySelector("section#contact")
-    if (contactSection) {
-      contactSection.scrollIntoView({ behavior: 'smooth' })
+
+  const itemVariants = {
+    hidden: { opacity: 0, y: 20 },
+    visible: { 
+      opacity: 1, 
+      y: 0,
+      transition: {
+        duration: 0.6,
+        ease: animationSettings.ease
+      }
+    }
+  }
+
+  const floatingVariants = {
+    animate: {
+      y: [1, -1, 0],
+      transition: {
+        duration: 6,
+        repeat: Infinity,
+        ease: "easeInOut"
+      }
+    }
+  }
+
+  const rotatingVariants = {
+    animate: {
+      rotate: 360,
+      transition: {
+        duration: 25,
+        repeat: Infinity,
+        ease: "linear"
+      }
+    }
+  }
+
+  const glowVariants = {
+    animate: {
+      opacity: [0.6, 0.8, 0.6],
+      scale: [1, 1.02, 1],
+      transition: {
+        duration: 4,
+        repeat: Infinity,
+        ease: "easeInOut"
+      }
     }
   }
 
@@ -56,41 +111,32 @@ export function HeroSection() {
       <div className="absolute inset-0 overflow-hidden">
         <div className="absolute top-0 left-0 w-full h-full bg-gradient-to-b from-background to-background/50" style={{ zIndex: 1 }}></div>
         
+        {/* Optimized background gradients with reduced complexity */}
         <motion.div 
-          className="absolute top-1/4 left-[20%] w-96 h-96 bg-purple-600/20 rounded-full blur-[120px] optimize-animation" 
-          animate={{ 
-            x: [0, 20, 0],
-            opacity: [0.2, 0.3, 0.2] 
-          }}
-          transition={{ 
-            duration: 10, 
-            repeat: Infinity,
-            ease: "easeInOut",
-            repeatType: "mirror" 
+          className="absolute top-1/4 left-[20%] w-96 h-96 bg-blue-600/35 dark:bg-blue-600/20 rounded-full blur-[120px] optimize-animation" 
+          variants={glowVariants}
+          animate="animate"
+          style={{ 
+            willChange: 'transform, opacity',
+            backfaceVisibility: 'hidden'
           }}
         />
         <motion.div 
-          className="absolute top-1/3 right-[20%] w-96 h-96 bg-blue-600/20 rounded-full blur-[120px]" 
-          animate={{ 
-            x: [0, -20, 0],
-            opacity: [0.2, 0.3, 0.2]  
-          }}
-          transition={{ 
-            duration: 10, 
-            repeat: Infinity,
-            ease: "easeInOut" 
+          className="absolute top-1/3 right-[20%] w-96 h-96 bg-blue-700/30 dark:bg-blue-600/20 rounded-full blur-[120px]" 
+          variants={glowVariants}
+          animate="animate"
+          style={{ 
+            willChange: 'transform, opacity',
+            backfaceVisibility: 'hidden'
           }}
         />
         <motion.div 
-          className="absolute bottom-1/4 left-[30%] w-80 h-80 bg-primary/20 rounded-full blur-[100px]" 
-          animate={{ 
-            y: [0, -15, 0],
-            opacity: [0.15, 0.25, 0.15]  
-          }}
-          transition={{ 
-            duration: 12, 
-            repeat: Infinity,
-            ease: "easeInOut" 
+          className="absolute bottom-1/4 left-[30%] w-80 h-80 bg-blue-800/25 dark:bg-primary/20 rounded-full blur-[100px]" 
+          variants={glowVariants}
+          animate="animate"
+          style={{ 
+            willChange: 'transform, opacity',
+            backfaceVisibility: 'hidden'
           }}
         />
       </div>
@@ -99,55 +145,85 @@ export function HeroSection() {
         <HeroParticles />
       </div>
 
-      <div className="container mx-auto px-4 md:px-6 relative z-10">
+      <motion.div 
+        className="container mx-auto px-4 md:px-6 relative z-10"
+        variants={containerVariants}
+        initial="hidden"
+        animate="visible"
+      >
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-4 items-center">
           <motion.div
-            initial={{ opacity: 0, scale: 0.9 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 0.8 }}
-            className="lg:col-span-6 order-1 lg:order-1 flex justify-center mb-8 sm:mb-12 lg:mb-0 mt-32 sm:mt-36 md:mt-24 lg:mt-0"
+            variants={itemVariants}
+            className="lg:col-span-6 order-1 lg:order-1 flex justify-center mb-8 sm:mb-12 lg:mb-0 mt-32 sm:mt-36 md:mt-24 lg:mt-20"
           >
             <div className="relative w-[240px] h-[240px] sm:w-[280px] sm:h-[280px] md:w-[320px] md:h-[320px] lg:w-[360px] lg:h-[360px] mx-auto">
+              {/* Optimized glow effects */}
               <motion.div 
-                className="absolute -bottom-10 -left-10 w-40 h-40 bg-primary/10 rounded-full blur-[60px]"
-                animate={{ scale: [1, 1.05, 1] }}
-                transition={{ duration: 6, repeat: Infinity }}
+                className="absolute -bottom-10 -left-10 w-40 h-40 bg-blue-600/20 dark:bg-primary/10 rounded-full blur-[60px]"
+                variants={glowVariants}
+                animate="animate"
+                style={{ 
+                  willChange: 'transform, opacity',
+                  backfaceVisibility: 'hidden'
+                }}
               />
               <motion.div 
-                className="absolute -top-10 -right-10 w-40 h-40 bg-purple-500/10 rounded-full blur-[60px]"
-                animate={{ scale: [1, 1.1, 1] }}
-                transition={{ duration: 8, repeat: Infinity, delay: 1 }}
+                className="absolute -top-10 -right-10 w-40 h-40 bg-blue-700/18 dark:bg-blue-500/10 rounded-full blur-[60px]"
+                variants={glowVariants}
+                animate="animate"
+                style={{ 
+                  willChange: 'transform, opacity',
+                  backfaceVisibility: 'hidden'
+                }}
               />
+              {/* Light mode solid accent colors */}
+              <div className="absolute -top-5 -left-5 w-8 h-8 bg-primary/30 dark:bg-transparent rounded-full"></div>
+              <div className="absolute -bottom-5 -right-5 w-6 h-6 bg-blue-500/40 dark:bg-transparent rounded-full"></div>
+              <div className="absolute top-1/4 -right-8 w-4 h-4 bg-cyan-500/35 dark:bg-transparent rounded-full"></div>
               
               <div className="relative w-full h-full z-10 group">
                 <div className="absolute inset-0 flex items-center justify-center">
+                  {/* Optimized rotating rings */}
                   <motion.div 
                     className="absolute w-full h-full rounded-full border border-primary/20"
-                    animate={{ rotate: 360 }}
-                    transition={{ duration: 25, repeat: Infinity, ease: "linear" }}
-                    style={{ boxShadow: "0 0 15px rgba(var(--primary), 0.15)" }}
+                    variants={rotatingVariants}
+                    animate="animate"
+                    style={{ 
+                      boxShadow: "0 0 15px rgba(var(--primary), 0.15)",
+                      willChange: 'transform',
+                      backfaceVisibility: 'hidden'
+                    }}
                   />
                   <motion.div 
-                    className="absolute w-[110%] h-[110%] rounded-full border border-purple-500/10"
-                    animate={{ rotate: -360 }}
-                    transition={{ duration: 30, repeat: Infinity, ease: "linear" }}
-                    style={{ boxShadow: "0 0 15px rgba(139, 92, 246, 0.1)" }}
+                    className="absolute w-[110%] h-[110%] rounded-full border border-blue-500/10"
+                    variants={rotatingVariants}
+                    animate="animate"
+                    style={{ 
+                      boxShadow: "0 0 15px rgba(139, 92, 246, 0.1)",
+                      willChange: 'transform',
+                      backfaceVisibility: 'hidden'
+                    }}
                   />
                   <motion.div 
                     className="absolute w-[120%] h-[120%] rounded-full border border-blue-500/10"
-                    animate={{ rotate: 360 }}
-                    transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
-                    style={{ boxShadow: "0 0 15px rgba(59, 130, 246, 0.1)" }}
+                    variants={rotatingVariants}
+                    animate="animate"
+                    style={{ 
+                      boxShadow: "0 0 15px rgba(59, 130, 246, 0.1)",
+                      willChange: 'transform',
+                      backfaceVisibility: 'hidden'
+                    }}
                   />
                 </div>
                 
                 <motion.div 
-                  className="absolute -inset-6 bg-gradient-to-tr from-primary/10 via-purple-500/5 to-transparent rounded-full opacity-80"
-                  animate={{ 
-                    opacity: [0.6, 0.8, 0.6],
-                    scale: [1, 1.03, 1],
+                  className="absolute -inset-6 bg-gradient-to-tr from-primary/10 via-blue-500/5 to-transparent rounded-full opacity-80"
+                  variants={glowVariants}
+                  animate="animate"
+                  style={{ 
+                    willChange: 'transform, opacity',
+                    backfaceVisibility: 'hidden'
                   }}
-                  transition={{ duration: 4, repeat: Infinity }}
                 />
                 
                 <div className="absolute inset-0 rounded-full shadow-[0_0_40px_rgba(var(--primary),0.3)] overflow-hidden z-20">
@@ -157,62 +233,65 @@ export function HeroSection() {
                     <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_40%,rgba(var(--primary),0.15)_1px,transparent_1px)] bg-[size:8px_8px] opacity-50 z-10"></div>
                     
                     <motion.div 
-                      className="absolute inset-0 bg-gradient-to-tl from-primary/10 to-purple-500/10 opacity-70 z-20 
-                                transition-opacity duration-700"
-                      animate={{ 
-                        background: ['linear-gradient(to top left, rgba(var(--primary), 0.1), rgba(139, 92, 246, 0.1))', 
-                                    'linear-gradient(to top left, rgba(139, 92, 246, 0.1), rgba(var(--primary), 0.1))', 
-                                    'linear-gradient(to top left, rgba(var(--primary), 0.1), rgba(139, 92, 246, 0.1))']
+                      className="absolute inset-0 bg-gradient-to-tl from-primary/10 to-blue-500/10 opacity-70 z-20 transition-opacity duration-700"
+                      variants={glowVariants}
+                      animate="animate"
+                      style={{ 
+                        willChange: 'transform, opacity',
+                        backfaceVisibility: 'hidden'
                       }}
-                      transition={{ duration: 8, repeat: Infinity }}
-                      whileHover={{ opacity: 0.9 }}
                     />
                     
                     <div className="relative w-full h-full rounded-full overflow-hidden z-30">
-                      <div className="absolute inset-0 bg-gradient-to-b from-primary/15 via-transparent to-purple-500/15"></div>
+                      <div className="absolute inset-0 bg-gradient-to-b from-primary/15 via-transparent to-blue-500/15"></div>
+                      {/* Light mode solid background */}
+                      <div className="absolute inset-0 bg-primary/1 dark:bg-transparent rounded-full"></div>
                       
                       <motion.img
                         src="/Profile-Display-removebg.png"
                         alt="Talha's Profile"
-                        className="absolute inset-0 w-full h-full object-contain scale-[0.9] object-center z-40 transition-all duration-700 ease-out 
-                                  filter drop-shadow-[0_10px_20px_rgba(0,0,0,0.3)]"
-                        style={{ mixBlendMode: 'normal' }}
-                        whileHover={{ scale: 0.95 }}
-                        animate={{ 
-                          y: [10, 5, 10], // Changed from [0, -5, 0] to position it lower
+                        className="absolute inset-0 w-full h-full object-contain scale-[0.9] object-center z-40 transition-all duration-700 ease-out filter drop-shadow-[0_10px_20px_rgba(var(--primary),0.2)]"
+                        style={{ 
+                          mixBlendMode: 'normal',
+                          willChange: 'transform',
+                          backfaceVisibility: 'hidden',
+                          transform: 'translateY(18px)'
                         }}
-                        transition={{ 
-                          y: { duration: 6, repeat: Infinity, ease: "easeInOut" },
-                        }}
+                        variants={floatingVariants}
+                        animate="animate"
                       />
                       
                       <motion.div 
                         className="absolute inset-0 bg-gradient-to-tr from-transparent via-white/8 to-transparent z-50 opacity-0 transition-opacity duration-500"
-                        animate={{ opacity: [0, 0.2, 0] }}
-                        transition={{ duration: 5, repeat: Infinity }}
+                        variants={glowVariants}
+                        animate="animate"
+                        style={{ 
+                          willChange: 'opacity',
+                          backfaceVisibility: 'hidden'
+                        }}
                       />
                     </div>
                   </div>
                 </div>
                 
+                {/* Optimized floating particles */}
                 <div className="absolute inset-0 overflow-visible pointer-events-none">
-                  {[...Array(7)].map((_, i) => (
+                  {[...Array(5)].map((_, i) => (
                     <motion.div
                       key={i}
                       className="absolute rounded-full"
                       style={{
                         top: `${15 + i * 12}%`,
                         left: `${8 + i * 16}%`,
-                        width: `${i % 3 === 0 ? 8 : 5}px`,
-                        height: `${i % 3 === 0 ? 8 : 5}px`,
-                        backgroundColor: i % 3 === 0 ? 'rgb(var(--primary))' : i % 3 === 1 ? 'rgb(139, 92, 246)' : 'rgb(59, 130, 246)',
+                        width: `${i % 3 === 0 ? 6 : 4}px`,
+                        height: `${i % 3 === 0 ? 6 : 4}px`,
+                        backgroundColor: i % 3 === 0 ? 'rgb(14, 165, 233)' : i % 3 === 1 ? 'rgb(6, 182, 212)' : 'rgb(59, 130, 246)',
                         opacity: 0.4,
+                        willChange: 'transform, opacity',
+                        backfaceVisibility: 'hidden'
                       }}
-                      animate={{
-                        y: [0, i % 2 === 0 ? -15 : -10, 0],
-                        opacity: [0.4, 0.8, 0.4],
-                        scale: [1, 1.2, 1]
-                      }}
+                      variants={floatingVariants}
+                      animate="animate"
                       transition={{
                         duration: 2 + i * 0.5,
                         repeat: Infinity,
@@ -222,88 +301,83 @@ export function HeroSection() {
                   ))}
                 </div>
                 
+                {/* Optimized floating icons */}
                 <motion.div 
-                  className="absolute -left-4 top-1/4 w-12 h-12 rounded-xl bg-white/90 dark:bg-black/80 backdrop-blur-md shadow-lg flex items-center justify-center p-2 z-40
-                            border border-white/30 dark:border-white/10 shadow-[0_8px_16px_rgba(0,0,0,0.1)]"
-                  animate={{ 
-                    y: [0, -8, 0],
-                    rotateZ: [0, 5, 0, -5, 0]
+                  className="absolute -left-4 top-1/4 w-12 h-12 rounded-xl bg-white/90 dark:bg-black/80 backdrop-blur-md shadow-lg flex items-center justify-center p-2 z-40 border border-white/30 dark:border-white/10 shadow-[0_8px_16px_rgba(var(--primary),0.08)]"
+                  variants={floatingVariants}
+                  animate="animate"
+                  style={{ 
+                    willChange: 'transform',
+                    backfaceVisibility: 'hidden'
                   }}
-                  transition={{ 
-                    y: { duration: 3, repeat: Infinity, ease: "easeInOut" },
-                    rotateZ: { duration: 6, repeat: Infinity, ease: "easeInOut" }
-                  }}
-                  whileHover={{ scale: 1.15, rotate: 5 }}
                 >
                   <Code className="h-7 w-7 text-blue-500" />
+                  {/* Light mode solid accent */}
+                  <div className="absolute inset-0 bg-primary/20 dark:bg-transparent rounded-xl"></div>
                 </motion.div>
 
                 <motion.div 
-                  className="absolute -right-4 top-1/3 w-12 h-12 rounded-xl bg-white/90 dark:bg-black/80 backdrop-blur-md shadow-lg flex items-center justify-center p-2 z-40
-                            border border-white/30 dark:border-white/10 shadow-[0_8px_16px_rgba(0,0,0,0.1)]"
-                  animate={{ 
-                    y: [0, 8, 0],
-                    rotateZ: [0, -5, 0, 5, 0]
+                  className="absolute -right-4 top-1/3 w-12 h-12 rounded-xl bg-white/90 dark:bg-black/80 backdrop-blur-md shadow-lg flex items-center justify-center p-2 z-40 border border-white/30 dark:border-white/10 shadow-[0_8px_16px_rgba(var(--primary),0.08)]"
+                  variants={floatingVariants}
+                  animate="animate"
+                  style={{ 
+                    willChange: 'transform',
+                    backfaceVisibility: 'hidden'
                   }}
-                  transition={{ 
-                    y: { duration: 4, repeat: Infinity, ease: "easeInOut" },
-                    rotateZ: { duration: 7, repeat: Infinity, ease: "easeInOut" }
-                  }}
-                  whileHover={{ scale: 1.15, rotate: -5 }}
                 >
                   <Laptop className="h-7 w-7 text-gray-700 dark:text-gray-300" />
+                  {/* Light mode solid accent */}
+                  <div className="absolute inset-0 bg-blue-500/25 dark:bg-transparent rounded-xl"></div>
                 </motion.div>
 
                 <motion.div 
-                  className="absolute left-1/4 -bottom-4 w-12 h-12 rounded-xl bg-white/90 dark:bg-black/80 backdrop-blur-md shadow-lg flex items-center justify-center p-2 z-40
-                            border border-white/30 dark:border-white/10 shadow-[0_8px_16px_rgba(0,0,0,0.1)]"
-                  animate={{ 
-                    y: [0, -6, 0],
-                    rotateZ: [0, 3, 0, -3, 0]
+                  className="absolute left-1/4 -bottom-4 w-12 h-12 rounded-xl bg-white/90 dark:bg-black/80 backdrop-blur-md shadow-lg flex items-center justify-center p-2 z-40 border border-white/30 dark:border-white/10 shadow-[0_8px_16px_rgba(var(--primary),0.08)]"
+                  variants={floatingVariants}
+                  animate="animate"
+                  style={{ 
+                    willChange: 'transform',
+                    backfaceVisibility: 'hidden'
                   }}
-                  transition={{ 
-                    y: { duration: 3.5, repeat: Infinity, ease: "easeInOut", delay: 0.5 },
-                    rotateZ: { duration: 6, repeat: Infinity, ease: "easeInOut", delay: 0.5 }
-                  }}
-                  whileHover={{ scale: 1.15, rotate: 3 }}
                 >
                   <FileCode className="h-7 w-7 text-blue-600" />
+                  {/* Light mode solid accent */}
+                  <div className="absolute inset-0 bg-cyan-500/20 dark:bg-transparent rounded-xl"></div>
                 </motion.div>
               </div>
             </div>
           </motion.div>
 
           <motion.div
-            initial={{ opacity: 0, x: 20 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.8, delay: 0.2 }}
+            variants={itemVariants}
             className="lg:col-span-6 order-2 lg:order-2 text-center lg:text-left"
           >
             <div className="space-y-6 max-w-xl mx-auto lg:ml-0">
               <motion.h1 
                 className="text-3xl md:text-4xl lg:text-5xl font-bold tracking-tight"
-                animate={{ opacity: [0.8, 1, 0.8] }}
-                transition={{ duration: 5, repeat: Infinity }}
+                variants={itemVariants}
+                style={{ 
+                  willChange: 'opacity',
+                  backfaceVisibility: 'hidden'
+                }}
               >
                 Hi, I'm <motion.span 
                           className="text-primary"
-                          animate={{ 
-                            color: ['hsl(var(--primary))', 'hsl(var(--primary) / 0.9)', 'hsl(var(--primary))']
+                          style={{ 
+                            willChange: 'color',
+                            backfaceVisibility: 'hidden'
                           }}
-                          transition={{ duration: 3, repeat: Infinity }}
                         >Talha</motion.span>.
                 <motion.span 
                   className="block mt-2 text-gradient"
-                  initial={{ backgroundSize: '100%' }}
-                  animate={{ backgroundSize: ['100%', '200%', '100%'] }}
-                  transition={{ duration: 5, repeat: Infinity }}
                   style={{
                     backgroundClip: 'text',
                     WebkitBackgroundClip: 'text', 
                     WebkitTextFillColor: 'transparent',
-                    backgroundImage: 'linear-gradient(90deg, hsl(var(--primary)), hsl(265 89% 78%), hsl(var(--primary)))',
+                    backgroundImage: 'linear-gradient(90deg, hsl(199, 89%, 48%), hsl(199, 89%, 68%), hsl(199, 89%, 48%))',
                     backgroundSize: '200%',
-                    display: 'inline-block'
+                    display: 'inline-block',
+                    willChange: 'background-size',
+                    backfaceVisibility: 'hidden'
                   }}
                 >Creating digital experiences</motion.span>
                 <span className="block mt-2">that make an impact</span>
@@ -317,9 +391,11 @@ export function HeroSection() {
               
               <motion.p 
                 className="text-muted-foreground text-base"
-                initial={{ opacity: 0, y: 10 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.4, duration: 0.8 }}
+                variants={itemVariants}
+                style={{ 
+                  willChange: 'opacity, transform',
+                  backfaceVisibility: 'hidden'
+                }}
               >
                 I build accessible, user-friendly websites and applications 
                 that solve real-world problems through clean code and creative thinking.
@@ -327,9 +403,11 @@ export function HeroSection() {
               
               <motion.div 
                 className="flex flex-wrap justify-center lg:justify-start gap-4 pt-1"
-                initial={{ opacity: 0, y: 10 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.6, duration: 0.8 }}
+                variants={itemVariants}
+                style={{ 
+                  willChange: 'opacity, transform',
+                  backfaceVisibility: 'hidden'
+                }}
               >
                 <Button 
                   size="default" 
@@ -338,10 +416,14 @@ export function HeroSection() {
                 >
                   <span className="relative z-10">Explore My Work</span>
                   <motion.span 
-                    className="absolute inset-0 bg-gradient-to-r from-primary/80 to-purple-600/80 z-0"
+                    className="absolute inset-0 bg-gradient-to-r from-primary/80 to-blue-600/80 z-0"
                     initial={{ x: '-100%' }}
                     whileHover={{ x: 0 }}
                     transition={{ duration: 0.3 }}
+                    style={{ 
+                      willChange: 'transform',
+                      backfaceVisibility: 'hidden'
+                    }}
                   />
                   <ArrowRight className="ml-2 h-4 w-4 relative z-10 group-hover:translate-x-1 transition-transform" />
                 </Button>
@@ -357,9 +439,11 @@ export function HeroSection() {
               
               <motion.div 
                 className="flex items-center justify-center lg:justify-start gap-5"
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ delay: 0.8, duration: 0.8 }}
+                variants={itemVariants}
+                style={{ 
+                  willChange: 'opacity',
+                  backfaceVisibility: 'hidden'
+                }}
               >
                 {[
                   { icon: <Github className="h-5 w-5" />, href: "https://github.com/Realistic-Talha" },
@@ -378,6 +462,10 @@ export function HeroSection() {
                       rotate: [0, 10, -10, 0],
                       transition: { duration: 0.5 } 
                     }}
+                    style={{ 
+                      willChange: 'transform',
+                      backfaceVisibility: 'hidden'
+                    }}
                   >
                     {social.icon}
                   </motion.a>
@@ -386,7 +474,7 @@ export function HeroSection() {
             </div>
           </motion.div>
         </div>
-      </div>
+      </motion.div>
       
       {/* Place the style outside of the nested components */}
       <style jsx>{`

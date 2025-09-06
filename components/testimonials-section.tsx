@@ -1,9 +1,10 @@
 "use client"
 
-import { useRef, useState, useEffect, useMemo } from "react"
+import { useRef, useState, useEffect } from "react"
 import Image from "next/image"
 import { motion, useInView } from "framer-motion"
 import { ChevronLeft, ChevronRight, Quote, Star } from "lucide-react"
+import { ClientOnly } from "./client-only"
 
 // Define an interface for the star objects
 interface StarProps {
@@ -22,7 +23,7 @@ const testimonials = [
       "Talha is an exceptional developer who delivered our mobile app ahead of schedule. His attention to detail and problem-solving skills are impressive.",
     name: "Sarah Johnson",
     title: "CEO, TechStart",
-    avatar: "/placeholder.svg?height=100&width=100",
+    avatar: "/test-1.jpg",
   },
   {
     id: 2,
@@ -30,7 +31,7 @@ const testimonials = [
       "Working with Talha was a pleasure. He understood our requirements perfectly and created a beautiful, functional website that exceeded our expectations.",
     name: "Michael Chen",
     title: "Marketing Director, Innovate Inc.",
-    avatar: "/placeholder.svg?height=100&width=100",
+    avatar: "/test-2.jpg",
   },
   {
     id: 3,
@@ -38,7 +39,7 @@ const testimonials = [
       "Talha's expertise in Flutter development helped us launch our app on both iOS and Android simultaneously. His code is clean and well-documented.",
     name: "Jessica Williams",
     title: "Product Manager, AppWorks",
-    avatar: "/placeholder.svg?height=100&width=100",
+    avatar: "/test-3.jpg",
   },
 ]
 
@@ -48,23 +49,29 @@ export function TestimonialsSection() {
   const isInView = useInView(ref, { once: true, margin: "-100px" })
   // Fix: Explicitly type the stars state
   const [stars, setStars] = useState<StarProps[]>([])
+  const [isMounted, setIsMounted] = useState(false)
 
   const STAR_COUNT = 12; // Lowered for performance
 
-  const memoizedStars = useMemo(() => (
-    Array.from({ length: STAR_COUNT }).map((_, i) => ({
-      id: `star-${i}`,
-      top: `${Math.random() * 95}%`,
-      left: `${Math.random() * 97}%`,
-      size: Math.floor(Math.random() * 5) + 2,
-      delay: i * 0.09,
-      duration: 5 + (i % 9)
-    }))
-  ), []);
-
+  // Mount check to prevent hydration issues
   useEffect(() => {
-    setStars(memoizedStars);
-  }, [memoizedStars]);
+    setIsMounted(true)
+  }, [])
+
+  // Generate stars only on client side to avoid hydration mismatch
+  useEffect(() => {
+    if (isMounted && typeof window !== 'undefined') {
+      const memoizedStars = Array.from({ length: STAR_COUNT }).map((_, i) => ({
+        id: `star-${i}`,
+        top: `${Math.random() * 95}%`,
+        left: `${Math.random() * 97}%`,
+        size: Math.floor(Math.random() * 5) + 2,
+        delay: i * 0.09,
+        duration: 5 + (i % 9)
+      }))
+      setStars(memoizedStars)
+    }
+  }, [isMounted])
 
   const nextTestimonial = () => {
     setActiveIndex((prev) => (prev + 1) % testimonials.length)
@@ -87,38 +94,40 @@ export function TestimonialsSection() {
           transition={{ duration: 14, repeat: Infinity, ease: "easeInOut" }}
         />
         <motion.div
-          className="absolute bottom-1/4 right-1/4 w-80 h-80 bg-purple-500/10 rounded-full blur-[100px]"
+          className="absolute bottom-1/4 right-1/4 w-80 h-80 bg-blue-500/10 rounded-full blur-[100px]"
           animate={{ scale: [1.1, 1, 1.1], opacity: [0.11, 0.18, 0.11] }}
           transition={{ duration: 12, repeat: Infinity, ease: "easeInOut" }}
         />
         {/* Client-side rendered stars - hide some on mobile */}
-        {stars.map((star, index) => (
-          <motion.div
-            key={star.id}
-            className={index > 6 ? 'hidden sm:block absolute' : 'absolute'}
-            style={{
-              top: star.top,
-              left: star.left,
-              pointerEvents: "none",
-              willChange: 'transform, opacity',
-              contain: 'layout paint',
-              backfaceVisibility: 'hidden'
-            }}
-            animate={{
-              opacity: [0.18, 0.7, 0.18],
-              scale: [1, 1.25, 1],
-              rotate: [0, 180, 360],
-            }}
-            transition={{
-              duration: star.duration,
-              repeat: Infinity,
-              delay: star.delay,
-              ease: "easeInOut"
-            }}
-          >
-            <Star className={`w-${star.size} h-${star.size} text-primary/40 drop-shadow`} />
-          </motion.div>
-        ))}
+        <ClientOnly>
+          {stars.map((star, index) => (
+            <motion.div
+              key={star.id}
+              className={index > 6 ? 'hidden sm:block absolute' : 'absolute'}
+              style={{
+                top: star.top,
+                left: star.left,
+                pointerEvents: "none",
+                willChange: 'transform, opacity',
+                contain: 'layout paint',
+                backfaceVisibility: 'hidden'
+              }}
+              animate={{
+                opacity: [0.18, 0.7, 0.18],
+                scale: [1, 1.25, 1],
+                rotate: [0, 180, 360],
+              }}
+              transition={{
+                duration: star.duration,
+                repeat: Infinity,
+                delay: star.delay,
+                ease: "easeInOut"
+              }}
+            >
+              <Star className={`w-${star.size} h-${star.size} text-primary/40 drop-shadow`} />
+            </motion.div>
+          ))}
+        </ClientOnly>
       </div>
 
       <div className="container mx-auto px-4 md:px-6 relative z-10 flex flex-col items-center">
@@ -128,7 +137,7 @@ export function TestimonialsSection() {
           transition={{ duration: 0.5 }}
           className="flex flex-col items-center mb-8 md:mb-16"
         >
-          <div className="inline-block px-3 py-1 rounded-full bg-gradient-to-r from-primary/10 via-purple-500/10 to-blue-500/10 text-primary text-xs md:text-base font-semibold mb-3 shadow backdrop-blur-sm tracking-wide">
+          <div className="inline-block px-3 py-1 rounded-full bg-gradient-to-r from-primary/10 via-blue-500/10 to-cyan-500/10 text-primary text-xs md:text-base font-semibold mb-3 shadow backdrop-blur-sm tracking-wide">
             <span className="inline-flex items-center gap-1 md:gap-2">
               <Star className="w-3 h-3 md:w-4 md:h-4 animate-pulse text-primary" />
               Testimonials
@@ -138,7 +147,7 @@ export function TestimonialsSection() {
             What <span className="text-gradient animate-gradient-move">Clients Say</span>
           </h2>
           <motion.div
-            className="mx-auto mt-2 mb-6 h-1 w-16 md:w-24 rounded-full bg-gradient-to-r from-primary via-purple-500 to-blue-500 shadow-lg"
+            className="mx-auto mt-2 mb-6 h-1 w-16 md:w-24 rounded-full bg-gradient-to-r from-primary via-blue-500 to-cyan-500 shadow-lg"
             initial={{ scaleX: 0 }}
             whileInView={{ scaleX: 1 }}
             viewport={{ once: true }}
@@ -158,7 +167,7 @@ export function TestimonialsSection() {
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: 40, scale: 0.97 }}
             transition={{ duration: 0.5, type: "spring", stiffness: 80, damping: 18 }}
-            className="relative w-full max-w-2xl mx-auto rounded-3xl bg-gradient-to-br from-background/90 via-primary/10 to-purple-100/10 dark:from-background/80 dark:via-primary/10 dark:to-blue-900/10 shadow-2xl border border-primary/10 p-4 md:p-14 flex flex-col items-center backdrop-blur-xl"
+            className="relative w-full max-w-2xl mx-auto rounded-3xl bg-gradient-to-br from-background/90 via-primary/10 to-blue-100/10 dark:from-background/80 dark:via-primary/10 dark:to-blue-900/10 shadow-2xl border border-primary/10 p-4 md:p-14 flex flex-col items-center backdrop-blur-xl"
           >
             {/* Quotation mark background on top left (not clipped) */}
             <motion.div
@@ -172,7 +181,7 @@ export function TestimonialsSection() {
             </motion.div>
             {/* Animated quote icon */}
             <motion.div
-              className="absolute -top-5 left-1/25 -translate-x-1/2 bg-gradient-to-br from-primary/90 to-purple-500/80 rounded-full p-2 md:p-3 shadow-lg"
+              className="absolute -top-5 left-1/25 -translate-x-1/2 bg-gradient-to-br from-primary/90 to-blue-500/80 rounded-full p-2 md:p-3 shadow-lg"
               initial={{ scale: 0.7, opacity: 0 }}
               animate={{ scale: 1, opacity: 1 }}
               transition={{ duration: 0.5, delay: 0.2 }}
@@ -224,7 +233,7 @@ export function TestimonialsSection() {
             {/* Animated border accent - animate from center to both ends */}
             <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-[90%] overflow-hidden rounded-b-3xl pointer-events-none">
               <motion.div
-                className="w-full h-1 bg-gradient-to-r from-primary via-purple-500 to-blue-500 shadow-lg"
+                className="w-full h-1 bg-gradient-to-r from-primary via-blue-500 to-cyan-500 shadow-lg"
                 initial={{ scaleX: 0, originX: 0.5 }}
                 animate={{ scaleX: 1, originX: 0.5 }}
                 transition={{ duration: 0.7, delay: 0.5 }}

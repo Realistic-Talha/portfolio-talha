@@ -10,7 +10,7 @@
     --card-foreground: 224 71.4% 4.1%;
     --popover: 0 0% 100%;
     --popover-foreground: 224 71.4% 4.1%;
-    --primary: 262.1 83.3% 57.8%;
+    --primary: 199 89% 48%;
     --primary-foreground: 210 20% 98%;
     --secondary: 220 14.3% 95.9%;
     --secondary-foreground: 220.9 39.3% 11%;
@@ -22,7 +22,7 @@
     --destructive-foreground: 210 20% 98%;
     --border: 220 13% 91%;
     --input: 220 13% 91%;
-    --ring: 262.1 83.3% 57.8%;
+    --ring: 199 89% 48%;
     --radius: 0.5rem;
     --ease-smooth: cubic-bezier(0.65, 0, 0.35, 1);
     --ease-bounce: cubic-bezier(0.68, -0.55, 0.27, 1.55);
@@ -37,7 +37,7 @@
     --card-foreground: 210 20% 98%;
     --popover: 224 71.4% 4.1%;
     --popover-foreground: 210 20% 98%;
-    --primary: 263.4 70% 50.4%;
+    --primary: 199 89% 48%;
     --primary-foreground: 210 20% 98%;
     --secondary: 215 27.9% 16.9%;
     --secondary-foreground: 210 20% 98%;
@@ -49,7 +49,7 @@
     --destructive-foreground: 210 20% 98%;
     --border: 215 27.9% 16.9%;
     --input: 215 27.9% 16.9%;
-    --ring: 263.4 70% 50.4%;
+    --ring: 199 89% 48%;
   }
 
   
@@ -85,9 +85,9 @@ section#home, div#home {
 }
 
 /* Remove dynamic accent colors from navbar */
-.modern-navbar.from-violet-500.to-indigo-500 .nav-logo,
 .modern-navbar.from-blue-500.to-cyan-500 .nav-logo,
-.modern-navbar.from-fuchsia-500.to-pink-500 .nav-logo {
+.modern-navbar.from-sky-500.to-blue-500 .nav-logo,
+.modern-navbar.from-cyan-500.to-teal-500 .nav-logo {
   transition: none; /* Remove transition between colors */
 }
 
@@ -163,7 +163,7 @@ section#home, div#home {
   background: linear-gradient(
     90deg,
     transparent,
-    rgba(var(--primary), 0.2),
+    rgba(14, 165, 233, 0.2),
     transparent
   );
   background-size: 200% 100%;
@@ -192,7 +192,7 @@ section#home, div#home {
 
 /* Gradient text */
 .text-gradient {
-  @apply bg-clip-text text-transparent bg-gradient-to-r from-primary to-purple-400;
+  @apply bg-clip-text text-transparent bg-gradient-to-r from-primary to-blue-400;
 }
 
 /* Glass effect */
@@ -224,7 +224,7 @@ section#home, div#home {
 .gradient-border {
   position: relative;
   border-radius: 0.5rem;
-  background: linear-gradient(var(--card), var(--card)) padding-box, linear-gradient(to right, #9747ff, #4f46e5)
+  background: linear-gradient(var(--card), var(--card)) padding-box, linear-gradient(to right, #0ea5e9, #0284c7)
     border-box;
   border: 2px solid transparent;
 }
@@ -236,7 +236,7 @@ section#home, div#home {
   inset: 0;
   border-radius: 0.75rem; /* xl */
   padding: 1px;
-  background: linear-gradient(to bottom right, rgba(127, 17, 224, 0.2), rgba(74, 222, 128, 0.2));
+  background: linear-gradient(to bottom right, rgba(14, 165, 233, 0.2), rgba(2, 132, 199, 0.2));
   -webkit-mask: 
     linear-gradient(#fff 0 0) content-box, 
     linear-gradient(#fff 0 0);
@@ -308,8 +308,8 @@ header a {
 
 /* Add these animations to your globals.css */
 @keyframes pulse-glow {
-  0%, 100% { box-shadow: 0 0 5px rgba(var(--primary), 0.3); }
-  50% { box-shadow: 0 0 20px rgba(var(--primary), 0.6); }
+  0%, 100% { box-shadow: 0 0 5px rgba(147, 51, 234, 0.3); }
+  50% { box-shadow: 0 0 20px rgba(147, 51, 234, 0.6); }
 }
 
 .pulse-glow {
@@ -1193,20 +1193,20 @@ header a {
   padding: 0 0.15rem;
 }
 
-/* Enhanced dot styling with explicit theme purple color */
+/* Enhanced dot styling with explicit theme blue color */
 .nav-brand-dot {
-  color: hsl(var(--primary)); /* This should be the theme purple */
+  color: hsl(var(--primary)); /* This should be the theme blue */
   font-weight: 800;
   position: relative;
   display: inline-block;
   transition: transform 0.3s ease;
   font-size: 1.5rem; /* Slightly larger for emphasis */
   font-family: var(--font-poppins);
-  /* Add glow effect to make the purple more vibrant */
+  /* Add glow effect to make the blue more vibrant */
   text-shadow: 0 0 3px rgba(var(--primary), 0.4);
-  /* Force the color to remain purple regardless of theme */
+  /* Force the color to remain blue regardless of theme */
   -webkit-text-fill-color: hsl(var(--primary));
-  text-fill-color: hsl(var(--primary));
+  -webkit-text-fill-color: hsl(var(--primary));
 }
 
 /* Prevent text gradient from affecting the dot */
@@ -1222,7 +1222,7 @@ header a {
   transform: translateY(-1px) scale(1.2);
 }
 
-/* Enhanced dot styling with vibrant purple color */
+/* Enhanced dot styling with vibrant blue color */
 .nav-brand-dot {
   color: hsl(var(--primary));
   font-weight: 800; /* Increased from 700 to 800 for bolder look */
@@ -1231,7 +1231,7 @@ header a {
   transition: transform 0.3s ease;
   font-size: 1.3rem;
   font-family: var(--font-poppins);
-  /* Add glow effect to make the purple more vibrant */
+  /* Add glow effect to make the blue more vibrant */
   text-shadow: 0 0 3px rgba(var(--primary), 0.4);
 }
 
@@ -1570,22 +1570,22 @@ header a {
 }
 
 /* Dynamic accent color transitions */
-.modern-navbar.from-violet-500.to-indigo-500 .nav-logo,
 .modern-navbar.from-blue-500.to-cyan-500 .nav-logo,
-.modern-navbar.from-fuchsia-500.to-pink-500 .nav-logo {
+.modern-navbar.from-sky-500.to-blue-500 .nav-logo,
+.modern-navbar.from-cyan-500.to-teal-500 .nav-logo {
   transition: none; /* Remove transition between colors */
-}
-
-.modern-navbar.from-violet-500.to-indigo-500 .nav-logo {
-  background: linear-gradient(145deg, rgb(139, 92, 246), rgb(79, 70, 229));
 }
 
 .modern-navbar.from-blue-500.to-cyan-500 .nav-logo {
   background: linear-gradient(145deg, rgb(59, 130, 246), rgb(6, 182, 212));
 }
 
-.modern-navbar.from-fuchsia-500.to-pink-500 .nav-logo {
-  background: linear-gradient(145deg, rgb(217, 70, 239), rgb(236, 72, 153));
+.modern-navbar.from-sky-500.to-blue-500 .nav-logo {
+  background: linear-gradient(145deg, rgb(14, 165, 233), rgb(59, 130, 246));
+}
+
+.modern-navbar.from-cyan-500.to-teal-500 .nav-logo {
+  background: linear-gradient(145deg, rgb(6, 182, 212), rgb(20, 184, 166));
 }
 
 /* Premium backdrop gradient glow effect */
@@ -2150,6 +2150,178 @@ header a {
   backface-visibility: hidden;
 }
 
+/* Enhanced Performance Optimizations */
+.performance-optimized {
+  will-change: transform, opacity;
+  backface-visibility: hidden;
+  perspective: 1000px;
+  transform: translateZ(0);
+  contain: layout paint;
+  isolation: isolate;
+}
+
+.ultra-smooth {
+  will-change: transform, opacity;
+  backface-visibility: hidden;
+  perspective: 1000px;
+  transform: translateZ(0);
+  contain: layout paint;
+  isolation: isolate;
+  transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+/* Reduce motion for users who prefer it */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+  
+  .optimize-animation,
+  .performance-optimized {
+    will-change: auto !important;
+    transform: none !important;
+  }
+}
+
+/* Hardware acceleration for smooth animations */
+.gpu-accelerated {
+  transform: translateZ(0);
+  backface-visibility: hidden;
+  perspective: 1000px;
+  will-change: transform;
+  contain: layout paint;
+  isolation: isolate;
+}
+
+/* Ultra-smooth scroll optimization */
+.scroll-optimized {
+  will-change: transform;
+  transform: translateZ(0);
+  contain: layout paint;
+  position: relative;
+}
+
+/* Animation optimization */
+.animation-optimized {
+  will-change: transform, opacity;
+  backface-visibility: hidden;
+  perspective: 1000px;
+  transform: translateZ(0);
+  contain: layout paint;
+  isolation: isolate;
+  transition: transform 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94),
+              opacity 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+/* Optimize scrolling performance */
+.smooth-scroll {
+  scroll-behavior: smooth;
+  -webkit-overflow-scrolling: touch;
+}
+
+/* Reduce layout thrashing */
+.layout-stable {
+  contain: layout;
+  will-change: auto;
+}
+
+/* Optimize paint performance */
+.paint-optimized {
+  contain: paint;
+  will-change: auto;
+}
+
+/* Optimize composite performance */
+.composite-optimized {
+  contain: layout paint;
+  will-change: transform;
+  transform: translateZ(0);
+}
+
+/* Performance monitoring styles */
+.performance-monitor {
+  position: fixed;
+  top: 10px;
+  right: 10px;
+  background: rgba(0, 0, 0, 0.8);
+  color: white;
+  padding: 8px 12px;
+  border-radius: 4px;
+  font-size: 12px;
+  font-family: monospace;
+  z-index: 9999;
+  pointer-events: none;
+}
+
+/* Optimize canvas rendering */
+canvas {
+  image-rendering: optimizeSpeed;
+  image-rendering: -moz-crisp-edges;
+  image-rendering: -webkit-optimize-contrast;
+  image-rendering: optimize-contrast;
+  -ms-interpolation-mode: nearest-neighbor;
+}
+
+/* Optimize image loading */
+img {
+  image-rendering: optimizeSpeed;
+  image-rendering: -moz-crisp-edges;
+  image-rendering: -webkit-optimize-contrast;
+  image-rendering: optimize-contrast;
+}
+
+/* Reduce animation complexity on low-end devices */
+@media (max-width: 768px) {
+  .optimize-animation {
+    will-change: auto;
+    transform: none;
+  }
+  
+  .performance-optimized {
+    will-change: auto;
+    transform: none;
+  }
+  
+  /* Disable complex animations on mobile */
+  .hero-particles {
+    display: none !important;
+  }
+  
+  /* Simplify animations on mobile */
+  * {
+    animation-duration: 0.3s !important;
+    transition-duration: 0.3s !important;
+  }
+}
+
+/* Performance optimization for low-end devices */
+@media (max-width: 480px) {
+  /* Disable all particles and complex animations */
+  canvas {
+    display: none !important;
+  }
+  
+  /* Simplify all animations */
+  * {
+    animation-duration: 0.2s !important;
+    transition-duration: 0.2s !important;
+    will-change: auto !important;
+  }
+}
+
+/* Optimize for high DPI displays */
+@media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
+  .optimize-animation,
+  .performance-optimized {
+    transform: translateZ(0) scale(1);
+  }
+}
+
 /* Smoother easing functions */
 :root {
   --ease-smooth: cubic-bezier(0.65, 0, 0.35, 1);
@@ -2267,7 +2439,7 @@ button,
   background-color: #F3E8FF; /* Slightly bluish off-white base */
 }
 
-/* Hero Section - Subtle Topography Pattern with Gradient */
+/* Hero Section - Subtle Topography Pattern */
 :root:not(.dark) section#home {
   background: 
     linear-gradient(120deg, rgba(245, 243, 255, 1) 0%, rgba(255, 251, 254, 1) 100%);
@@ -2281,7 +2453,7 @@ button,
   top: 0;
   left: 0;
   pointer-events: none;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100' height='100' viewBox='0 0 100 100'%3E%3Cg fill-rule='evenodd'%3E%3Cg fill='%23a78bfa' fill-opacity='0.05'%3E%3Cpath opacity='.5' d='M96 95h4v1h-4v4h-1v-4h-9v4h-1v-4h-9v4h-1v-4h-9v4h-1v-4h-9v4h-1v-4h-9v4h-1v-4h-9v4h-1v-4h-9v4h-1v-4h-9v4h-1v-4H0v-1h15v-9H0v-1h15v-9H0v-1h15v-9H0v-1h15v-9H0v-1h15v-9H0v-1h15v-9H0v-1h15v-9H0v-1h15v-9H0v-1h15V0h1v15h9V0h1v15h9V0h1v15h9V0h1v15h9V0h1v15h9V0h1v15h9V0h1v15h4v1h-4v9h4v1h-4v9h4v1h-4v9h4v1h-4v9h4v1h-4v9h4v1h-4v9h4v1h-4v9h4v1h-4v9zm-1 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-9-10h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm9-10v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-9-10h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm9-10v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-9-10h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9z'/%3E%3Cpath d='M6 5V0H5v5H0v1h5v94h1V6h94V5H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100' height='100' viewBox='0 0 100 100'%3E%3Cg fill-rule='evenodd'%3E%3Cg fill='%23a78bfa' fill-opacity='0.05'%3E%3Cpath opacity='.5' d='M96 95h4v1h-4v4h-1v-4h-9v4h-1v-4h-9v4h-1v-4h-9v4h-1v-4h-9v4h-1v-4h-9v4h-1v-4h-9v4h-1v-4h-9v4h-1v-4h-9v4h-1v-4H0v-1h15v-9H0v-1h15v-9H0v-1h15v-9H0v-1h15v-9H0v-1h15v-9H0v-1h15v-9H0v-1h15v-9H0v-1h15v-9H0v-1h15V0h1v15h9V0h1v15h9V0h1v15h9V0h1v15h9V0h1v15h9V0h1v15h9V0h1v15h9V0h1v15h4v1h-4v9h4v1h-4v9h4v1h-4v9h4v1h-4v9h4v1h-4v9h4v1h-4v9h4v1h-4v9h4v1h-4v9h4v1h-4v9h4v1h-4v9zm-1 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-9-10h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm9-10v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-9-10h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9z'/%3E%3Cpath d='M6 5V0H5v5H0v1h5v94h1V6h94V5H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
   z-index: -1;
 }
 
@@ -2478,656 +2650,18 @@ button,
   position: relative;
 }
 
-/* Add these styles after your existing navbar styles */
-
-/* Mobile-specific navbar enhancements */
-@media (max-width: 767px) {
-  .modern-navbar {
-    padding: 0.4rem 0.6rem;
-    border-radius: 3rem;
-    max-width: calc(100% - 2rem);
-    margin: 0.75rem auto;
-  }
-  
-  .nav-logo {
-    height: 2.3rem;
-    width: 2.3rem;
-  }
-  
-  .nav-logo-text {
-    font-size: 1.2rem;
-  }
-  
-  .nav-brand-text {
-    font-size: 1.1rem;
-  }
-  
-  .nav-theme-toggle {
-    width: 2.2rem;
-    height: 2.2rem;
-  }
-  
-  .nav-hamburger {
-    width: 20px;
-    display: flex;
-    flex-direction: column;
-    gap: 4px;
-    align-items: center;
-  }
-  
-  .nav-hamburger-line {
-    width: 100%;
-    height: 2px;
-    background-color: hsl(var(--foreground));
-    border-radius: 5px;
-    transition: all 0.3s ease;
-  }
-  
-  .nav-menu-trigger {
-    width: 2.2rem;
-    height: 2.2rem;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background-color: rgba(255, 255, 255, 0.08);
-  }
-  
-  .dark .nav-menu-trigger {
-    background-color: rgba(255, 255, 255, 0.04);
-  }
-  
-  .nav-menu-trigger:hover {
-    background-color: rgba(255, 255, 255, 0.12);
-  }
-  
-  .nav-mobile-resume {
-    padding: 0.6rem;
-    font-size: 0.9rem;
-  }
-}
-
-/* Improved mobile touch targets */
-@media (max-width: 640px) {
-  .nav-mobile-link {
-    padding: 0.75rem 0.75rem;
-    margin-bottom: 0.25rem;
-  }
-  
-  .nav-theme-toggle-mobile {
-    padding: 0.5rem 0.65rem;
-    font-size: 0.8rem;
-  }
-  
-  .nav-mobile-footer {
-    padding-top: 1rem;
-  }
-}
-
-/* Safe area insets for notched phones */
-@supports (padding: max(0px)) {
-  .nav-mobile-menu {
-    padding-top: max(1.25rem, env(safe-area-inset-top));
-    padding-right: max(1.25rem, env(safe-area-inset-right));
-    padding-bottom: max(1.25rem, env(safe-area-inset-bottom));
-    padding-left: max(1.25rem, env(safe-area-inset-left));
-  }
-}
-
-/* Fix for short screens */
-@media (max-height: 600px) {
-  .nav-mobile-menu .nav-mobile-link {
-    padding: 0.5rem 0.75rem;
-    margin-bottom: 0.125rem;
-  }
-  
-  .nav-mobile-menu .mt-6 {
-    margin-top: 0.75rem;
-  }
-  
-  .nav-mobile-menu .nav-mobile-footer {
-    padding-top: 0.75rem;
-  }
-}
-
-/* Improved mobile menu closing button */
-.nav-close-btn {
-  width: 32px;
-  height: 32px;
-  border-radius: 50%;
-}
-
-/* Fix logo text container on mobile */
-@media (max-width: 640px) {
-  .nav-logo-text-container {
-    display: block !important;
-  }
-}
-
-/* Add viewport height fix for mobile browsers */
-@media (max-width: 767px) {
-  .h-svh {
-    height: 100vh; /* fallback */
-    height: 100svh;
-  }
-  
-  .min-h-svh {
-    min-height: 100vh; /* fallback */
-    min-height: 100svh;
-  }
-}
-
-/* --- Hamburger visibility fix --- */
-.nav-menu-trigger {
-  width: 2.6rem;
-  height: 2.6rem;
-  min-width: 2.6rem;
-  min-height: 2.6rem;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border-radius: 50%;
-  background-color: rgba(255,255,255,0.08);
-  /* Remove margin/padding that could cause clipping */
-  margin: 0;
-  padding: 0;
-  position: relative;
-  z-index: 20;
-  /* Ensure it's above nav content */
-}
-
-/* Make sure hamburger icon is centered and not clipped */
-.nav-hamburger {
-  width: 22px;
-  height: 22px;
-  display: flex;
-  flex-direction: column;
-  gap: 5px;
-  align-items: center;
-  justify-content: center;
-  pointer-events: none; /* Prevent double click issues */
-}
-.nav-hamburger-line {
-  width: 100%;
-  height: 2.5px;
-  background-color: hsl(var(--foreground));
-  border-radius: 5px;
-  transition: all 0.3s ease;
-}
-/* --- Stepped navbar scaling --- */
-@media (min-width: 1400px) {
-  .modern-navbar { 
-    max-width: 90%; 
-    padding: 0.7rem 1.5rem;
-  }
-  .nav-logo { 
-    height: 2.7rem; 
-    width: 2.7rem; 
-  }
-  .nav-brand-text { 
-    font-size: 1.2rem; 
-  }
-}
-
-@media (min-width: 1200px) and (max-width: 1399px) {
-  .modern-navbar { 
-    max-width: 92%; 
-    padding: 0.65rem 1.2rem;
-  }
-  .nav-logo { 
-    height: 2.5rem; 
-    width: 2.5rem; 
-  }
-  .nav-brand-text { 
-    font-size: 1.15rem; 
-  }
-}
-
-@media (min-width: 992px) and (max-width: 1199px) {
-  .modern-navbar { 
-    max-width: 95%; 
-    padding: 0.6rem 1rem;
-  }
-  .nav-logo { 
-    height: 2.4rem; 
-    width: 2.4rem; 
-  }
-  .nav-brand-text { 
-    font-size: 1.1rem; 
-  }
-}
-
-@media (min-width: 768px) and (max-width: 991px) {
-  .modern-navbar { 
-    max-width: 96%; 
-    padding: 0.55rem 0.9rem;
-  }
-  .nav-logo { 
-    height: 2.3rem; 
-    width: 2.3rem; 
-  }
-  .nav-brand-text { 
-    font-size: 1.05rem; 
-  }
-}
-
-/* Mobile Breakpoints */
-@media (max-width: 767px) {
-  .modern-navbar {
-    max-width: 98%;
-    padding: 0.45rem 0.7rem;
-    border-radius: 2.5rem;
-  }
-  .nav-logo {
-    height: 2rem;
-    width: 2rem;
-  }
-  .nav-brand-text {
-    font-size: 0.95rem;
-  }
-  .nav-menu-trigger {
-    width: 2.2rem;
-    height: 2.2rem;
-    min-width: 2.2rem;
-    min-height: 2.2rem;
-  }
-  .nav-hamburger {
-    width: 18px;
-    height: 18px;
-    gap: 3px;
-  }
-}
-
-@media (max-width: 480px) {
-  .modern-navbar {
-    max-width: 98%;
-    padding: 0.45rem 0.7rem;
-    border-radius: 2.5rem;
-  }
-  .nav-logo {
-    height: 2rem;
-    width: 2rem;
-  }
-  .nav-brand-text {
-    font-size: 0.95rem;
-  }
-  .nav-menu-trigger {
-    width: 2.2rem;
-    height: 2.2rem;
-    min-width: 2.2rem;
-    min-height: 2.2rem;
-  }
-  .nav-hamburger {
-    width: 18px;
-    height: 18px;
-    gap: 3px;
-  }
-}
-
-/* Mobile-specific responsive styles for About section */
-@media (max-width: 767px) {
-  /* Transform grid layout to vertical stack */
-  section#about .inset-0.grid.grid-cols-2 {
-    position: static !important;
-    display: flex !important;
-    flex-direction: column !important;
-    height: auto !important;
-    gap: 16px !important;
-    margin-top: 1.5rem;
-    margin-bottom: 2rem;
-  }
-  
-  /* Make quadrant wrapper rectangular */
-  section#about .quadrant-wrapper {
-    width: 100% !important;
-    max-width: 280px !important;
-    aspect-ratio: 1.6/1 !important; /* Wider rectangle shape */
-  }
-  
-  /* Ensure the quadrant fills the wrapper */
-  section#about .quadrant {
-    height: 100% !important;
-    width: 100% !important;
-  }
-  
-  /* Adjust content spacing within quadrants */
-  section#about .quadrant .flex.items-center.gap-3 {
-    gap: 0.5rem;
-  }
-  
-  section#about .quadrant .p-2 {
-    padding: 0.4rem !important;
-  }
-  
-  /* Adjust content to fit rectangular shape */
-  section#about .quadrant .relative.z-10 {
-    padding: 0.7rem !important;
-  }
-  
-  /* Ensure skills wrap properly in rectangular layout */
-  section#about .quadrant .skills-wrap {
-    display: flex !important;
-    flex-wrap: wrap !important;
-    gap: 0.3rem !important;
-  }
-  
-  /* Make skills wrap better on mobile */
-  section#about .quadrant .flex.flex-wrap {
-    gap: 0.25rem;
-  }
-  
-  section#about .quadrant .px-2 {
-    padding-left: 0.25rem !important;
-    padding-right: 0.45rem !important;
-  }
-  
-  /* Center list items on mobile */
-  section#about .grid.grid-cols-1.sm\:grid-cols-2 {
-    grid-template-columns: 1fr;
-    gap: 0.75rem;
-    max-width: 400px;
-    margin-left: auto;
-    margin-right: auto;
-  }
-  
-  /* Button positioned at the end */
-  section#about .pt-6 {
-    display: flex;
-    justify-content: center;
-    width: 100%;
-    margin-top: 1.5rem;
-  }
-  
-  section#about .ultimate-button {
-    padding: 0.5rem 1.2rem !important;
-    font-size: 0.85rem !important;
-    max-width: 180px !important;
-    text-align: center !important;
-    display: flex !important;
-    align-items: center !important;
-    justify-content: center !important;
-  }
-  
-  /* Ensure button text is properly sized and spaced */
-  section#about .ultimate-button span {
-    font-size: 0.85rem !important;
-    line-height: 1.4 !important;
-    display: inline-block !important;
-    white-space: nowrap !important;
-  }
-  
-  /* Fix icon spacing in button */
-  section#about .ultimate-button .ultimate-icon-wrapper {
-    margin-right: 0.4rem !important;
-  }
-  
-  /* Improve spacing */
-  section#about .space-y-8 > * {
-    margin-top: 1rem;
-    margin-bottom: 1rem;
-  }
-  
-  section#about .space-y-8 > *:first-child {
-    margin-top: 0;
-  }
-  
-  section#about .space-y-8 > *:last-child {
-    margin-bottom: 0;
-    margin-top: 1.5rem;
-  }
-
-  /* Fix button appearance specifically */
-  section#about .button-wrapper {
-    display: flex !important;
-    justify-content: center !important;
-    width: 100% !important;
-  }
-  
-  section#about .ultimate-button {
-    width: auto !important;
-    max-width: none !important;
-    padding: 0.6rem 1.5rem !important;
-    font-size: 0.85rem !important;
-    height: auto !important;
-    min-height: 2.8rem !important;
-  }
-  
-  /* Fix the button text display */
-  section#about .ultimate-button .relative.z-10 {
-    display: flex !important;
-    align-items: center !important;
-    justify-content: center !important;
-    white-space: nowrap !important;
-  }
-  
-  /* Fix globe icon sizing */
-  section#about .ultimate-button .sparkle-icon {
-    height: 1rem !important;
-    width: 1rem !important;
-    margin-right: 0.4rem !important;
-  }
-  
-  /* Ensure text transitions properly */
-  section#about .ultimate-button .relative.overflow-hidden.inline-block.h-6 {
-    height: auto !important;
-    min-height: 1.5rem !important;
-  }
-  
-  section#about .ultimate-button .block.transition-transform,
-  section#about .ultimate-button .absolute.inset-0.translate-y-full {
-    font-size: 0.85rem !important;
-    line-height: 1.5 !important;
-  }
-}
-
-/* Fix only the button size and text placement */
-@media (max-width: 767px) {
-  /* Button container - ensure it's centered but not too wide */
-  section#about .button-wrapper {
-    justify-content: center !important;
-  }
-  
-  /* Button sizing - make it more proportional */
-  section#about .ultimate-button {
-    width: auto !important;
-    max-width: none !important;
-    padding-left: 1.25rem !important;
-    padding-right: 1.25rem !important;
-    font-size: 0.85rem !important;
-  }
-}
-
-/* Center all About section elements on mobile */
-@media (max-width: 767px) {
-  /* Center the quadrants container */
-  section#about .inset-0.grid.grid-cols-2 {
-    position: static !important;
-    display: flex !important;
-    flex-direction: column !important;
-    align-items: center !important;
-    justify-content: center !important;
-    margin: 0 auto !important;
-  }
-  
-  /* Center each quadrant wrapper */
-  section#about .quadrant-wrapper {
-    margin: 0 auto !important;
-  }
-  
-  /* Center tabs */
-  section#about .flex.flex-wrap.gap-2 {
-    justify-content: center !important;
-  }
-  
-  /* Center text box */
-  section#about .min-h-\[100px\].bg-primary\/5 {
-    text-align: center !important;
-  }
-  
-  /* Center skill items */
-  section#about .grid.grid-cols-1.sm\:grid-cols-2.gap-3 {
-    justify-items: center !important;
-    margin: 0 auto !important;
-  }
-  
-  /* Center button */
-  section#about .button-wrapper,
-  section#about .pt-6 {
-    display: flex !important;
-    justify-content: center !important;
-    width: 100% !important;
-  }
-  
-  /* Center section text */
-  section#about .space-y-8 > * {
-    text-align: center !important;
-  }
-}
-
-/* Make all skill blocks equal size */
-@media (max-width: 767px) {
-  /* Target the skills blocks directly */
-  section#about .grid.grid-cols-1.sm\:grid-cols-2.gap-3 > div {
-    width: 100% !important;
-    height: 100% !important;
-    min-height: 80px !important; /* Ensure consistent height */
-    max-width: 300px !important;
-    display: flex !important;
-    align-items: flex-start !important;
-  }
-  
-  /* Ensure the content fills the container properly */
-  section#about .grid.grid-cols-1.sm\:grid-cols-2.gap-3 > div > div:last-child {
-    flex: 1 !important;
-  }
-}
-
-/* Make elements inside quadrants smaller */
-@media (max-width: 767px) {
-  section#about .quadrant .p-2 {
-    padding: 0.4rem !important;
-  }
-  
-  section#about .quadrant .h-6 {
-    height: 1.35rem !important;
-    width: 1.35rem !important;
-  }
-  
-  section#about .quadrant h3 {
-    font-size: 0.92rem !important;
-  }
-  
-  section#about .quadrant .px-2 {
-    padding: 0.25rem 0.45rem !important;
-    font-size: 0.72rem !important;
-  }
-  
-  section#about .quadrant .text-2xl {
-    font-size: 1.35rem !important;
-  }
-  
-  section#about .quadrant .text-xs {
-    font-size: 0.72rem !important;
-  }
-}
-
-/* Adjust heading and paragraph text sizes */
-@media (max-width: 767px) {
-  /* Reduce heading text size */
-  section#about .text-4xl.md\:text-5xl.font-bold.mb-6 {
-    font-size: 1.75rem !important;
-    line-height: 1.3 !important;
-    margin-bottom: 0.75rem !important;
-  }
-  
-  /* Reduce paragraph text size */
-  section#about .text-lg.text-muted-foreground.max-w-3xl {
-    font-size: 0.9rem !important;
-    line-height: 1.5 !important;
-  }
-}
-
-/* Make tab content text smaller on mobile */
-@media (max-width: 767px) {
-  /* Target the tabs content area text */
-  section#about .min-h-\[100px\].bg-primary\/5 .text-lg {
-    font-size: 1.1rem !important;
-    line-height: 1.4 !important;
-  }
-  
-  /* Also adjust the general text size in this section */
-  section#about .text-base.sm\:text-lg,
-  section#about .text-lg {
-    font-size: 1.1rem !important;
-  }
-}
-
-/* Add these styles at the end of the file */
-
-/* Navbar stylish entrance and exit animations */
-header.nav-visible {
-  animation: nav-reveal 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-  pointer-events: all;
-}
-
-header.nav-hidden {
-  animation: nav-hide 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+/* Light mode quadrant enhancements */
+:root:not(.dark) .quadrant { position: relative; }
+:root:not(.dark) .quadrant::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at 30% 20%, rgba(14,165,233,0.25), transparent 60%),
+              radial-gradient(circle at 70% 80%, rgba(6,182,212,0.18), transparent 65%);
   pointer-events: none;
+  mix-blend-mode: screen;
+  opacity: .85;
 }
-
-@keyframes nav-reveal {
-  0% {
-    transform: translateY(-100%);
-    opacity: 0.7;
-    filter: blur(3px);
-  }
-  60% {
-    transform: translateY(-2%);
-    filter: blur(0px);
-    opacity: 1;
-  }
-  100% {
-    transform: translateY(0);
-    opacity: 1;
-  }
-}
-
-@keyframes nav-hide {
-  0% {
-    transform: translateY(0);
-    opacity: 1;
-  }
-  100% {
-    transform: translateY(-100%);
-    opacity: 0.7;
-    filter: blur(2px);
-  }
-}
-
-/* Navbar responsive visibility behavior */
-@media (min-width: 768px) {
-  /* Always show navbar on larger screens */
-  header.nav-visible,
-  header.nav-hidden {
-    animation: none !important;
-    transform: translateY(0) !important;
-    opacity: 1 !important;
-    filter: blur(0) !important;
-    pointer-events: all !important;
-    transition: none !important;
-  }
-}
-
-/* Enhanced navbar with backdrop blur */
-.modern-navbar {
-  backdrop-filter: blur(30px);
-  -webkit-backdrop-filter: blur(30px);
-}
-
-/* Slightly increase the blur during scrolling for better visibility */
-@media (max-width: 767px) {
-  header.nav-visible .modern-navbar {
-    backdrop-filter: blur(30px);
-    -webkit-backdrop-filter: blur(30px);
-  }
-}
+:root:not(.dark) .quadrant:hover::after { opacity: 1; }
+:root:not(.dark) .quadrant .skills-wrap span { transition: all .35s cubic-bezier(.25,.46,.45,.94); }
+:root:not(.dark) .quadrant .skills-wrap span:hover { filter: drop-shadow(0 0 6px rgba(14,165,233,.55)); }

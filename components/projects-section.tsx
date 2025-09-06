@@ -181,7 +181,7 @@ export function ProjectsSection() {
         className={`
           group relative flex flex-col md:flex-row ${isReverse ? "md:flex-row-reverse" : ""}
           items-center md:items-stretch gap-0 md:gap-0
-          rounded-3xl bg-gradient-to-br from-white/90 via-primary/10 to-purple-100/10 dark:from-background/90 dark:via-primary/10 dark:to-blue-900/10
+          rounded-3xl bg-gradient-to-br from-white/90 via-primary/10 to-blue-100/10 dark:from-background/90 dark:via-primary/10 dark:to-blue-900/10
           shadow-xl border border-primary/10 overflow-visible
           hover:shadow-[0_8px_40px_0_rgba(139,92,246,0.18)] transition-all duration-400
           backdrop-blur-2xl
@@ -195,7 +195,7 @@ export function ProjectsSection() {
         <div className="relative flex-shrink-0 w-full md:w-[340px] min-h-[180px] sm:min-h-[220px] md:min-h-[260px] flex items-center justify-center z-30">
           {/* Glow and shadow layers */}
           <motion.div
-            className="absolute left-1/2 -translate-x-1/2 top-8 w-72 h-72 rounded-2xl shadow-2xl bg-gradient-to-br from-primary/10 via-purple-400/10 to-blue-400/10 blur-2xl opacity-60 pointer-events-none"
+            className="absolute left-1/2 -translate-x-1/2 top-8 w-72 h-72 rounded-2xl shadow-2xl bg-gradient-to-br from-primary/10 via-blue-400/10 to-cyan-400/10 blur-2xl opacity-60 pointer-events-none"
             animate={{ opacity: [0.5, 0.8, 0.5], scale: [1, 1.04, 1] }}
             transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}
           />
@@ -239,7 +239,7 @@ export function ProjectsSection() {
           </motion.div>
           {/* Floating accent elements */}
           <motion.div
-            className="absolute -bottom-4 left-1/2 -translate-x-1/2 w-36 h-8 bg-gradient-to-r from-primary/30 via-purple-400/20 to-blue-400/20 blur-2xl rounded-full z-10"
+            className="absolute -bottom-4 left-1/2 -translate-x-1/2 w-36 h-8 bg-gradient-to-r from-primary/30 via-blue-400/20 to-cyan-400/20 blur-2xl rounded-full z-10"
             animate={{ scaleX: [1, 1.1, 1], opacity: [0.5, 0.7, 0.5] }}
             transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
           />
@@ -255,7 +255,7 @@ export function ProjectsSection() {
               animate={{ scale: 1, rotate: 0 }}
               transition={{ delay: 0.3 + index * 0.1, type: "spring", stiffness: 200 }}
             >
-              <span className="inline-flex items-center gap-1 px-2 sm:px-3 py-1 rounded-full bg-gradient-to-r from-primary to-purple-500 text-white text-xs font-semibold shadow-lg">
+              <span className="inline-flex items-center gap-1 px-2 sm:px-3 py-1 rounded-full bg-gradient-to-r from-primary to-blue-500 text-white text-xs font-semibold shadow-lg">
                 <Star className="w-3 h-3 sm:w-4 sm:h-4" /> Featured
               </span>
             </motion.div>
@@ -265,7 +265,7 @@ export function ProjectsSection() {
         <div className="flex-1 flex flex-col justify-between px-4 sm:px-8 py-6 sm:py-8 md:py-8 relative z-20 text-center md:text-left">
           {/* Animated vertical accent bar on left/right for desktop */}
           <motion.div
-            className={`hidden md:block absolute ${isReverse ? "right-0" : "left-0"} top-8 bottom-8 w-1 bg-gradient-to-b from-primary via-purple-500 to-blue-500 rounded-full opacity-70`}
+            className={`hidden md:block absolute ${isReverse ? "right-0" : "left-0"} top-8 bottom-8 w-1 bg-gradient-to-b from-primary via-blue-500 to-cyan-500 rounded-full opacity-70`}
             initial={{ scaleY: 0 }}
             whileInView={{ scaleY: 1 }}
             viewport={{ once: true }}
@@ -277,7 +277,7 @@ export function ProjectsSection() {
               {project.technologies.map((tech: string, i: number) => (
                 <span
                   key={i}
-                  className="px-1.5 sm:px-2 py-1 bg-gradient-to-r from-primary/10 via-purple-500/10 to-blue-500/10 text-xs rounded-full text-primary font-medium shadow-sm border border-primary/10"
+                  className="px-1.5 sm:px-2 py-1 bg-gradient-to-r from-primary/10 via-blue-500/10 to-cyan-500/10 text-xs rounded-full text-primary font-medium shadow-sm border border-primary/10"
                 >
                   {tech}
                 </span>
@@ -365,7 +365,7 @@ export function ProjectsSection() {
           transition={{ duration: 14, repeat: Infinity, ease: "easeInOut" }}
         />
         <motion.div
-          className="absolute bottom-1/4 -right-24 w-96 h-96 bg-purple-500/10 rounded-full blur-[120px]"
+          className="absolute bottom-1/4 -right-24 w-96 h-96 bg-blue-500/10 rounded-full blur-[120px]"
           animate={{ scale: [1.1, 1, 1.1], opacity: [0.13, 0.22, 0.13] }}
           transition={{ duration: 12, repeat: Infinity, ease: "easeInOut" }}
         />
@@ -429,7 +429,7 @@ export function ProjectsSection() {
             My Recent<span className="text-gradient animate-gradient-move"> Projects</span>
           </motion.h2>
           <motion.div
-            className="mx-auto mt-2 mb-8 h-1 w-32 rounded-full bg-gradient-to-r from-primary via-purple-500 to-blue-500 shadow-lg"
+            className="mx-auto mt-2 mb-8 h-1 w-32 rounded-full bg-gradient-to-r from-primary via-blue-500 to-cyan-500 shadow-lg"
             initial={{ scaleX: 0 }}
             whileInView={{ scaleX: 1 }}
             viewport={{ once: true }}
@@ -585,7 +585,7 @@ export function ProjectsSection() {
                 View All Projects
               </span>
               <motion.span
-                className="absolute inset-0 bg-gradient-to-r from-primary/80 to-purple-600/80 z-0"
+                className="absolute inset-0 bg-gradient-to-r from-primary/80 to-blue-600/80 z-0"
                 initial={{ x: '-100%' }}
                 whileHover={{ x: 0 }}
                 transition={{ duration: 0.3 }}

@@ -47,9 +47,9 @@ export function GlowingCursor() {
       }}
     >
       <div
-        className="w-12 h-12 rounded-full bg-gradient-to-br from-primary via-purple-500 to-blue-500 opacity-60 animate-pulse"
+                    className="w-12 h-12 rounded-full bg-gradient-to-br from-primary via-blue-500 to-cyan-500 opacity-60 animate-pulse"
         style={{
-          boxShadow: "0 0 32px 8px #a78bfa, 0 0 64px 16px #6366f1",
+          boxShadow: "0 0 32px 8px #0ea5e9, 0 0 64px 16px #0284c7",
         }}
       ></div>
     </div>

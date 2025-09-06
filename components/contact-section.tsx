@@ -59,7 +59,7 @@ export function ContactSection() {
       {/* Animated blurred background */}
       <div className="absolute inset-0 pointer-events-none z-0">
         <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-primary/10 rounded-full blur-[120px] animate-pulse"></div>
-        <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-purple-500/10 rounded-full blur-[120px] animate-pulse"></div>
+        <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-blue-500/10 rounded-full blur-[120px] animate-pulse"></div>
       </div>
 
       <div className="container mx-auto px-3 sm:px-4 md:px-6 relative z-10">
@@ -69,10 +69,10 @@ export function ContactSection() {
           transition={{ duration: 0.5 }}
           className="flex flex-col items-center mb-8 sm:mb-12 md:mb-16"
         >
-          <div className="inline-block px-3 py-1 rounded-full bg-gradient-to-r from-primary/20 via-purple-500/20 to-blue-500/20 text-primary text-xs sm:text-sm font-semibold mb-3 sm:mb-4 shadow backdrop-blur-sm tracking-wide animate-gradient-move">
+          <div className="inline-block px-3 py-1 rounded-full bg-gradient-to-r from-primary/20 via-blue-500/20 to-cyan-500/20 text-primary text-xs sm:text-sm font-semibold mb-3 sm:mb-4 shadow backdrop-blur-sm tracking-wide animate-gradient-move">
             <span className="inline-flex items-center gap-1 sm:gap-2">
               <span className="w-1.5 h-1.5 sm:w-2 sm:h-2 rounded-full bg-primary animate-pulse"></span>
-              Let’s Connect
+              Let's Connect
             </span>
           </div>
           <h2 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-bold font-poppins text-center mb-2">
@@ -118,7 +118,7 @@ export function ContactSection() {
                       href={s.url}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="w-9 h-9 sm:w-10 sm:h-10 md:w-12 md:h-12 rounded-full bg-gradient-to-br from-primary/20 to-purple-500/20 flex items-center justify-center text-primary hover:bg-primary hover:text-white transition-colors shadow-lg relative group"
+                      className="w-9 h-9 sm:w-10 sm:h-10 md:w-12 md:h-12 rounded-full bg-gradient-to-br from-primary/20 to-blue-500/20 flex items-center justify-center text-primary hover:bg-primary hover:text-white transition-colors shadow-lg relative group"
                       whileHover={{ scale: 1.15, rotate: 8 }}
                       whileTap={{ scale: 0.95 }}
                       title={s.name}

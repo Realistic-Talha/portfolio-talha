@@ -13,7 +13,7 @@ const blogPosts = [
     title: "How to Build a Flutter App with Clean Architecture",
     excerpt:
       "Learn how to structure your Flutter applications using Clean Architecture principles for better maintainability and testability.",
-    image: "/placeholder.svg?height=400&width=600",
+    image: "/placeholder.jpg",
     date: "Mar 15, 2023",
     readTime: "8 min read",
     url: "#",
@@ -23,7 +23,7 @@ const blogPosts = [
     title: "Mastering State Management in React",
     excerpt:
       "A comprehensive guide to different state management approaches in React applications, from Context API to Redux.",
-    image: "/placeholder.svg?height=400&width=600",
+    image: "/placeholder.jpg",
     date: "Feb 22, 2023",
     readTime: "10 min read",
     url: "#",
@@ -33,7 +33,7 @@ const blogPosts = [
     title: "UI/UX Design Principles Every Developer Should Know",
     excerpt:
       "Discover essential design principles that can help developers create more user-friendly and visually appealing interfaces.",
-    image: "/placeholder.svg?height=400&width=600",
+    image: "/placeholder.jpg",
     date: "Jan 10, 2023",
     readTime: "6 min read",
     url: "#",

@@ -275,7 +275,7 @@ export function SkillsSection() {
           <>
             <motion.div
               className={`absolute -top-[15%] left-[8%] w-[32%] h-[32%] rounded-full ${
-                isLightMode ? 'bg-purple-600/10' : 'bg-purple-600/20'
+                isLightMode ? 'bg-blue-600/10' : 'bg-blue-600/20'
               } blur-[90px]`}
               animate={{ scale: [1, 1.08, 1], opacity: isLightMode ? [0.2, 0.35, 0.2] : [0.15, 0.25, 0.15] }}
               transition={{ duration: 14, repeat: Infinity, ease: "easeInOut" }}
@@ -291,8 +291,8 @@ export function SkillsSection() {
             <motion.div
               className={`absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-[70vw] h-[22vw] ${
                 isLightMode 
-                  ? 'bg-gradient-to-r from-indigo-700/15 via-purple-500/10 to-blue-600/15'
-                  : 'bg-gradient-to-r from-primary/20 via-purple-400/10 to-blue-400/10'
+                  ? 'bg-gradient-to-r from-blue-700/15 via-cyan-500/10 to-blue-600/15'
+                  : 'bg-gradient-to-r from-primary/20 via-blue-400/10 to-cyan-400/10'
               } rounded-full blur-[100px] opacity-50 pointer-events-none`}
               animate={{ rotate: [0, 10, -10, 0] }}
               transition={{ duration: 22, repeat: Infinity, ease: "easeInOut" }}
@@ -311,8 +311,8 @@ export function SkillsSection() {
               height: 2,
               background: `linear-gradient(90deg, transparent, ${
                 isLightMode 
-                  ? (Math.random() > 0.5 ? "#555" : "hsl(var(--primary))")
-                  : (Math.random() > 0.5 ? "white" : "hsl(var(--primary))")
+                          ? (Math.random() > 0.5 ? "#555" : "hsl(199, 89%, 48%)")
+        : (Math.random() > 0.5 ? "white" : "hsl(199, 89%, 48%)")
               })`
             }}
             animate={{
@@ -431,14 +431,14 @@ export function SkillsSection() {
               animate={{
                 boxShadow: isLightMode
                   ? [
-                    "0 0 20px rgba(var(--primary), 0.4)",
-                    "0 0 40px rgba(var(--primary), 0.6)",
-                    "0 0 20px rgba(var(--primary), 0.4)",
+                    "0 0 20px rgba(147, 51, 234, 0.4)",
+                    "0 0 40px rgba(147, 51, 234, 0.6)",
+                    "0 0 20px rgba(147, 51, 234, 0.4)",
                   ]
                   : [
-                    "0 0 20px rgba(var(--primary), 0.3)",
-                    "0 0 40px rgba(var(--primary), 0.5)",
-                    "0 0 20px rgba(var(--primary), 0.3)",
+                    "0 0 20px rgba(139, 92, 246, 0.3)",
+                    "0 0 40px rgba(139, 92, 246, 0.5)",
+                    "0 0 20px rgba(139, 92, 246, 0.3)",
                   ],
               }}
               transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
@@ -494,7 +494,7 @@ export function SkillsSection() {
                         height: size,
                         left: `${left}%`,
                         top: `${top}%`,
-                        backgroundColor: isLightMode ? "rgba(var(--primary), 0.4)" : "rgba(var(--primary), 0.3)",
+                        backgroundColor: isLightMode ? "rgba(147, 51, 234, 0.4)" : "rgba(139, 92, 246, 0.3)",
                       }}
                       animate={{
                         y: [0, -10 + Math.random() * 10, 0],
@@ -770,8 +770,8 @@ export function SkillsSection() {
               height: 2,
               background: `linear-gradient(90deg, transparent, ${
                 isLightMode
-                  ? (Math.random() > 0.5 ? "#555" : `hsl(var(--primary))`)
-                  : (Math.random() > 0.5 ? "white" : `hsl(var(--primary))`)
+                          ? (Math.random() > 0.5 ? "#555" : `hsl(199, 89%, 48%)`)
+        : (Math.random() > 0.5 ? "white" : `hsl(199, 89%, 48%)`)
               })`
             }}
             animate={{

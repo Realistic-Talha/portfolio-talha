@@ -7,10 +7,19 @@ import { Briefcase, Calendar, GraduationCap, MapPin } from "lucide-react"
 const experiences = [
   {
     type: "work",
+    title: "Mern Stack Developer",
+    company: "DEVCIR",
+    location: "Islamabad, Pakistan",
+    period: "March 2025 - Present",
+    description:
+      "Developing and maintaining full-stack web applications using MongoDB, Express.js, React, and Node.js. Collaborating with cross-functional teams to deliver scalable solutions, implementing RESTful APIs, and optimizing application performance for enhanced user experience.",
+  },
+  {
+    type: "work",
     title: "Front-End Web Developer",
     company: "DEVCIR",
     location: "Islamabad, Pakistan",
-    period: "Dec 2024 - Present",
+    period: "Dec 2024 - Feb 2025",
     description:
       "Designing and maintaining interactive web applications using HTML, CSS, JavaScript, React, Wordpress and Webflow to elevate user experience and functionality.",
   },
@@ -52,7 +61,7 @@ export function ExperienceSection() {
       {/* Background elements */}
       <div className="absolute inset-0 overflow-hidden">
         <div className="absolute top-1/3 right-1/3 w-48 sm:w-64 h-48 sm:h-64 bg-primary/10 rounded-full blur-[80px] sm:blur-[100px]"></div>
-        <div className="absolute bottom-0 left-1/4 w-56 sm:w-72 h-56 sm:h-72 bg-purple-500/10 rounded-full blur-[90px] sm:blur-[120px]"></div>
+        <div className="absolute bottom-0 left-1/4 w-56 sm:w-72 h-56 sm:h-72 bg-blue-500/10 rounded-full blur-[90px] sm:blur-[120px]"></div>
       </div>
 
       <div className="container mx-auto px-4 sm:px-6 relative z-10">
@@ -73,7 +82,7 @@ export function ExperienceSection() {
         {/* Timeline */}
         <div className="relative flex flex-col md:flex-row md:justify-center" ref={ref}>
           {/* Vertical timeline line - adjusted for mobile */}
-          <div className="absolute left-[20px] md:left-1/2 top-0 h-full md:-translate-x-1/2 w-1 bg-gradient-to-b from-primary/30 via-primary/60 to-purple-400/30 rounded-full z-0" />
+          <div className="absolute left-[20px] md:left-1/2 top-0 h-full md:-translate-x-1/2 w-1 bg-gradient-to-b from-primary/30 via-primary/60 to-blue-400/30 rounded-full z-0" />
 
           <div className="flex flex-col gap-8 sm:gap-12 md:gap-16 w-full max-w-3xl mx-auto z-10">
             {experiences.map((exp, idx) => {
@@ -82,7 +91,7 @@ export function ExperienceSection() {
               // Adjust alignment for mobile and desktop
               const align = idx % 2 === 0 ? "md:items-end" : "md:items-start"
               const cardBg = isWork
-                ? "bg-gradient-to-br from-primary/10 via-background to-purple-100/10"
+                ? "bg-gradient-to-br from-primary/10 via-background to-blue-100/10"
                 : "bg-gradient-to-br from-blue-100/10 via-background to-primary/10"
               return (
                 <motion.div

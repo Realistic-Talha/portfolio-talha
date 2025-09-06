@@ -22,9 +22,9 @@ export const MouseScrollIndicator = ({ text = "SCROLL", className = "" }) => {
             y: [0, 8, 0],
             opacity: 1,
             boxShadow: [
-              '0 0 15px rgba(var(--primary), 0.2)',
-              '0 0 20px rgba(var(--primary), 0.4)',
-              '0 0 15px rgba(var(--primary), 0.2)'
+              '0 0 15px rgba(147, 51, 234, 0.2)',
+              '0 0 20px rgba(147, 51, 234, 0.4)',
+              '0 0 15px rgba(147, 51, 234, 0.2)'
             ]
           }}
           transition={{

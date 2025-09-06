@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button"
 import { motion, useInView, useAnimation, AnimatePresence, useMotionValue } from "framer-motion"
 import { Download, Code, Globe, Database, Puzzle, Sparkles, ArrowRight } from "lucide-react"
 import { MouseScrollIndicator } from "@/components/ui/mouse-scroll-indicator"
+import { ClientOnly } from "./client-only"
 
 // First add the proper TypeScript interface for particles
 interface Particle {
@@ -36,18 +37,20 @@ export function AboutSection() {
   }, [])
 
   useEffect(() => {
-    // Only generate particles on the client side
-    setParticles(
-      Array.from({ length: 5 }).map((_, i) => ({
-        id: `particle-${i}`,
-        x: Math.floor(Math.random() * 80) + 10,
-        y: Math.floor(Math.random() * 80) + 10,
-        delay: i * 0.5,
-        size: Math.random() * 4 + 2,
-        duration: 1.5 + i * 0.5
-      }))
-    )
-  }, [])
+    // Only generate particles on the client side to avoid hydration mismatch
+    if (typeof window !== 'undefined') {
+      setParticles(
+        Array.from({ length: 5 }).map((_, i) => ({
+          id: `particle-${i}`,
+          x: Math.floor(Math.random() * 80) + 10,
+          y: Math.floor(Math.random() * 80) + 10,
+          delay: i * 0.5,
+          size: Math.random() * 4 + 2,
+          duration: 1.5 + i * 0.5
+        }))
+      )
+    }
+  }, [isMounted])
 
   useEffect(() => {
     if (isInView && isMounted) {
@@ -65,16 +68,9 @@ export function AboutSection() {
     }
   }, [isInView, controls, isMounted])
 
-  const smootherScrollEffect = useCallback((scrollPosition: number) => {
-    if (scrollPosition > -500 && scrollPosition < 500) {
-      // Use RAF for smoother animation
-      requestAnimationFrame(() => {
-        y.set(scrollPosition * 0.1);
-      });
-    }
-  }, [y]);
-
-  // Debounce scroll handler for smoother parallax
+  // Enhanced scroll-based reveal animation
+  const [scrollProgress, setScrollProgress] = useState(0);
+  
   useEffect(() => {
     if (!isMounted) return;
 
@@ -86,9 +82,14 @@ export function AboutSection() {
 
           const scrollY = window.scrollY;
           const sectionTop = ref.current.offsetTop;
-          const scrollPosition = scrollY - sectionTop;
-
-          smootherScrollEffect(scrollPosition);
+          const sectionHeight = ref.current.offsetHeight;
+          const windowHeight = window.innerHeight;
+          
+          // Calculate scroll progress through the section
+          const scrollPosition = scrollY - sectionTop + windowHeight;
+          const progress = Math.max(0, Math.min(1, scrollPosition / (sectionHeight + windowHeight)));
+          
+          setScrollProgress(progress);
           ticking = false;
         });
         ticking = true;
@@ -97,7 +98,7 @@ export function AboutSection() {
 
     window.addEventListener('scroll', handleScroll, { passive: true });
     return () => window.removeEventListener('scroll', handleScroll);
-  }, [isMounted, smootherScrollEffect]);
+  }, [isMounted]);
 
   useEffect(() => {
     if (!isMounted) return;
@@ -114,12 +115,18 @@ export function AboutSection() {
       requestAnimationFrame(() => {
         parallaxY.set(mouseYRatio * 20);
         
+        try {
         document.querySelectorAll('.quadrant').forEach((element, i) => {
           const htmlElement = element as HTMLElement;
+            if (htmlElement) {
           const factor = i % 2 === 0 ? 1 : -1;
           htmlElement.style.transform = `translate3d(${mouseXRatio * 10 * factor}px, ${mouseYRatio * 10 * factor}px, 0)`;
           htmlElement.style.transition = "transform 0.2s var(--ease-out-smooth)";
+            }
         });
+        } catch (error) {
+          console.warn('Error updating quadrant transforms:', error);
+        }
       });
     };
     
@@ -129,6 +136,7 @@ export function AboutSection() {
 
   useEffect(() => {
     if (isMounted) {
+      try {
       // Check if bottom bars are present
       const quadrants = document.querySelectorAll('.quadrant');
       quadrants.forEach((q, i) => {
@@ -137,11 +145,15 @@ export function AboutSection() {
           console.log(`Missing bottom bar in quadrant ${i}`);
         }
       });
+      } catch (error) {
+        console.warn('Error checking quadrant bottom bars:', error);
+      }
     }
   }, [isMounted]);
 
   useEffect(() => {
     if (isMounted) {
+      try {
       // Fix the frontend quadrant bottom bar specifically
       const frontendQuadrant = document.querySelector('.quadrant:first-child');
       if (frontendQuadrant) {
@@ -150,9 +162,12 @@ export function AboutSection() {
         if (!existingBar) {
           // Create and add the missing bottom bar
           const bottomBar = document.createElement('div');
-          bottomBar.className = 'absolute bottom-0 left-0 right-0 h-2 bg-gradient-to-r from-primary to-purple-500 group-hover:animate-pulse-width z-20';
+          bottomBar.className = 'absolute bottom-0 left-0 right-0 h-2 bg-gradient-to-r from-primary to-blue-500 group-hover:animate-pulse-width z-20';
           frontendQuadrant.appendChild(bottomBar);
         }
+        }
+      } catch (error) {
+        console.warn('Error fixing frontend quadrant bottom bar:', error);
       }
     }
   }, [isMounted]);
@@ -187,7 +202,7 @@ export function AboutSection() {
       iconBg: "bg-primary/20",
       iconColor: "text-primary",
       skills: ['Flutter', 'React', 'Next.js', 'TypeScript', 'CSS/Sass'],
-      barColor: "from-primary to-purple-600"
+              barColor: "from-primary to-blue-600"
     },
     {
       title: "Backend",
@@ -195,7 +210,7 @@ export function AboutSection() {
       iconBg: "bg-blue-500/20",
       iconColor: "text-blue-500",
       skills: ['Firebase', 'Node.js', 'GraphQL', 'REST APIs', 'Python', 'C++'],
-      barColor: "from-blue-500 to-indigo-600"
+              barColor: "from-blue-500 to-cyan-600"
     },
     {
       title: "Experience",
@@ -250,6 +265,11 @@ export function AboutSection() {
         <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-primary/50 to-transparent"></div>
         <div className="absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-primary/50 to-transparent"></div>
         
+        {/* Light mode dark accent backgrounds */}
+        <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-slate-800/5 dark:bg-transparent rounded-full blur-[120px]"></div>
+        <div className="absolute bottom-1/3 right-1/4 w-80 h-80 bg-gray-900/8 dark:bg-transparent rounded-full blur-[100px]"></div>
+        <div className="absolute top-1/2 left-1/2 w-64 h-64 bg-slate-700/6 dark:bg-transparent rounded-full blur-[80px]"></div>
+        
         <svg
           className="absolute inset-0 w-full h-full opacity-30"
           viewBox="0 0 100 100"
@@ -268,7 +288,7 @@ export function AboutSection() {
               <path
                 d="M 8,0 L 0,0 0,8"
                 fill="none"
-                stroke="rgba(var(--primary), 0.05)"
+                stroke="rgba(147, 51, 234, 0.05)"
                 strokeWidth="0.5"
               />
             </pattern>
@@ -301,48 +321,108 @@ export function AboutSection() {
 
       <motion.div 
         className="container mx-auto px-4 md:px-6 relative z-10"
-        style={isMounted ? { y } : undefined}
+        style={{
+          transform: `translateY(${scrollProgress * 20}px)`,
+          opacity: 0.8 + (scrollProgress * 0.2)
+        }}
       >
         <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 0.6 }}
           className="flex flex-col items-center text-center mb-16"
+          initial={{ opacity: 0, y: 50 }}
+          animate={isInView ? { 
+            opacity: 1, 
+            y: 0,
+            transition: { 
+              duration: 0.8, 
+              ease: [0.25, 0.46, 0.45, 0.94],
+              staggerChildren: 0.2
+            }
+          } : { opacity: 0, y: 50 }}
         >
           <motion.div 
-            initial={{ opacity: 0, scale: 0.8 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 0.5 }}
             className="inline-flex items-center justify-center gap-2 px-3 py-1 mb-3 rounded-full bg-primary/10 backdrop-blur-sm border border-primary/20"
+            initial={{ opacity: 0, scale: 0.8, y: 20 }}
+            animate={isInView ? { 
+              opacity: 1, 
+              scale: 1, 
+              y: 0,
+              transition: { 
+                duration: 0.6, 
+                delay: 0.2,
+                ease: [0.25, 0.46, 0.45, 0.94]
+              }
+            } : { opacity: 0, scale: 0.8, y: 20 }}
+            whileHover={{ 
+              scale: 1.05, 
+              backgroundColor: "rgba(14, 165, 233, 0.15)",
+              transition: { duration: 0.3 }
+            }}
+          >
+            <motion.div
+              animate={{ 
+                rotate: [0, 360],
+                scale: [1, 1.2, 1]
+              }}
+              transition={{ 
+                duration: 2, 
+                repeat: Infinity,
+                ease: "easeInOut"
+              }}
           >
             <Sparkles className="h-3.5 w-3.5 text-primary" />
+            </motion.div>
             <span className="text-xs text-primary">About Me</span>
           </motion.div>
           
           <motion.h2 
             className="text-2xl sm:text-3xl md:text-4xl font-bold mb-6 leading-tight"
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.7, delay: 0.3 }}
+            initial={{ opacity: 0, y: 30 }}
+            animate={isInView ? { 
+              opacity: 1, 
+              y: 0,
+              transition: { 
+                duration: 0.8, 
+                delay: 0.4,
+                ease: [0.25, 0.46, 0.45, 0.94]
+              }
+            } : { opacity: 0, y: 30 }}
           >
             Creative <motion.span 
               className="relative inline-block"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ duration: 0.5, delay: 0.6 }}
+              initial={{ opacity: 0, scale: 0.9 }}
+              animate={isInView ? { 
+                opacity: 1, 
+                scale: 1,
+                transition: { 
+                  duration: 0.6, 
+                  delay: 0.6,
+                  ease: [0.25, 0.46, 0.45, 0.94]
+                }
+              } : { opacity: 0, scale: 0.9 }}
             >
               <motion.span 
                 className="relative z-10 text-primary"
                 animate={{ 
-                  color: ['hsl(var(--primary))', 'hsl(var(--primary) / 0.9)', 'hsl(var(--primary))'] 
+                  color: ['hsl(199, 89%, 48%)', 'hsl(199, 89%, 42%)', 'hsl(199, 89%, 48%)'],
+                  textShadow: [
+                    '0 0 0px rgba(14, 165, 233, 0)',
+                    '0 0 10px rgba(14, 165, 233, 0.3)',
+                    '0 0 0px rgba(14, 165, 233, 0)'
+                  ]
                 }}
                 transition={{ duration: 3, repeat: Infinity }}
               >Developer</motion.span>
               <motion.span 
                 className="absolute -bottom-1.5 left-0 right-0 h-3 bg-primary/20 rounded-full -z-10"
                 initial={{ width: 0 }}
-                animate={{ width: "100%" }}
-                transition={{ duration: 0.7, delay: 0.5 }}
+                animate={isInView ? { 
+                  width: "100%",
+                  transition: { 
+                    duration: 0.8, 
+                    delay: 0.7,
+                    ease: [0.25, 0.46, 0.45, 0.94]
+                  }
+                } : { width: 0 }}
               ></motion.span>
             </motion.span> with a
             <br /> passion for intuitive design
@@ -351,8 +431,15 @@ export function AboutSection() {
           <motion.p 
             className="text-sm sm:text-base md:text-lg text-muted-foreground max-w-3xl mx-auto"
             initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.7, delay: 0.2 }}
+            animate={isInView ? { 
+              opacity: 1, 
+              y: 0,
+              transition: { 
+                duration: 0.7, 
+                delay: 0.8,
+                ease: [0.25, 0.46, 0.45, 0.94]
+              }
+            } : { opacity: 0, y: 20 }}
           >
             I combine technical expertise with creative problem-solving to build applications 
             that not only function flawlessly but also provide exceptional user experiences.
@@ -361,78 +448,121 @@ export function AboutSection() {
 
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-16 items-center" ref={ref}>
           <motion.div
-            initial={{ opacity: 0 }}
-            animate={isInView ? { opacity: 1 } : { opacity: 0 }}
-            transition={{ duration: 0.7 }}
             className="lg:col-span-6"
+            initial={{ opacity: 0, x: -50 }}
+            animate={isInView ? { 
+              opacity: 1, 
+              x: 0,
+              transition: { 
+                duration: 0.8, 
+                delay: 0.3,
+                ease: [0.25, 0.46, 0.45, 0.94]
+              }
+            } : { opacity: 0, x: -50 }}
           >
             <div className="relative aspect-square max-w-lg mx-auto">
               <div className="absolute inset-0 grid grid-cols-2 grid-rows-2 gap-3">
                 {quadrantContent.map((quadrant, index) => (
                   <div key={index} className="quadrant-wrapper">
                     <motion.div 
-                      className="quadrant relative rounded-xl overflow-hidden border border-white/01 bg-white/5 dark:bg-black/20 backdrop-blur-sm transition-all duration-200 h-full"
-                      initial={{ opacity: 0, scale: 0.8, rotate: index % 2 === 0 ? -5 : 5 }}
+                      className="quadrant relative rounded-xl overflow-hidden border border-white/10 dark:border-white/20 bg-white/5 dark:bg-slate-900/40 backdrop-blur-sm transition-all duration-300 h-full light:shadow-[0_0_0_1px_rgba(14,165,233,0.25),0_6px_18px_-4px_rgba(14,165,233,0.25),0_0_28px_-4px_rgba(6,182,212,0.35)] light:[background:linear-gradient(135deg,rgba(255,255,255,0.65)_0%,rgba(240,249,255,0.9)_100%)] light:hover:[background:linear-gradient(135deg,rgba(240,253,255,0.95)_0%,rgba(224,242,254,0.9)_60%,rgba(219,234,254,0.95)_100%)]"
+                      initial={{ 
+                        opacity: 0, 
+                        scale: 0.8, 
+                        y: 30,
+                        rotateX: 15,
+                        rotateY: 5
+                      }}
                       animate={isInView ? { 
                         opacity: 1, 
                         scale: 1, 
-                        rotate: 0,
                         y: 0,
-                        x: 0
+                        rotateX: 0,
+                        rotateY: 0
                       } : { 
                         opacity: 0, 
                         scale: 0.8, 
-                        rotate: index % 2 === 0 ? -5 : 5 
+                        y: 30,
+                        rotateX: 15,
+                        rotateY: 5
                       }}
-                      transition={{ duration: 0.7, delay: 0.1 * (index + 1) }}
+                      transition={{ 
+                        duration: 0.8, 
+                        delay: 0.4 + (0.1 * index),
+                        ease: [0.25, 0.46, 0.45, 0.94],
+                        type: "spring",
+                        stiffness: 100,
+                        damping: 15
+                      }}
                       whileHover={{ 
-                        y: -5, 
-                        backgroundColor: "rgba(var(--primary), 0.08)",
-                        boxShadow: "0 10px 20px rgba(0,0,0,0.1)",
-                        borderColor: "rgba(var(--primary), 0.3)",
-                        transition: { duration: 0.2 }
+                        y: -8, 
+                        scale: 1.05,
+                        rotateX: -5,
+                        rotateY: 2,
+                        backgroundColor: "rgba(14, 165, 233, 0.08)",
+                        boxShadow: "0 20px 40px rgba(14, 165, 233, 0.15)",
+                        borderColor: "rgba(14, 165, 233, 0.4)",
+                        transition: { 
+                          duration: 0.4, 
+                          ease: [0.25, 0.46, 0.45, 0.94],
+                          type: "spring",
+                          stiffness: 300,
+                          damping: 20
+                        }
                       }}
                     >
+                      {/* Subtle gradient overlay */}
                       <motion.div 
-                        className="absolute inset-0 opacity-60"
-                        animate={{ 
-                          background: [
-                            `radial-gradient(circle at 30% 30%, rgba(var(--primary), 0.2), transparent 70%)`,
-                            `radial-gradient(circle at 70% 70%, rgba(var(--primary), 0.3), transparent 70%)`,
-                            `radial-gradient(circle at 30% 30%, rgba(var(--primary), 0.2), transparent 70%)`
-                          ]
+                        className="absolute inset-0 opacity-40"
+                        initial={{ opacity: 0 }}
+                        animate={isInView ? { opacity: 0.4 } : { opacity: 0 }}
+                        transition={{ duration: 1, delay: 0.2 * (index + 1) }}
+                        style={{
+                          background: `linear-gradient(135deg, rgba(14, 165, 233, 0.1) 0%, transparent 50%, rgba(6, 182, 212, 0.1) 100%)`
                         }}
-                        transition={{ duration: 10, repeat: Infinity, ease: "easeInOut" }}
                       />
+                      {/* Light mode dark accent overlay */}
+                      <div className="absolute inset-0 bg-slate-800/8 dark:bg-transparent rounded-xl"></div>
                       
-                      <div className="absolute inset-0 opacity-20">
+                      {/* Subtle dot pattern */}
+                      <div className="absolute inset-0 opacity-10">
                         <div className="h-full w-full"
                           style={{
                             backgroundImage: "radial-gradient(circle at center, var(--foreground) 1px, transparent 1px)",
-                            backgroundSize: "15px 15px",
-                            backgroundPosition: "0 0",
-                            animation: "patternMove 20s linear infinite"
+                            backgroundSize: "20px 20px",
+                            backgroundPosition: "0 0"
                           }}
                         ></div>
                       </div>
                       
+                      {/* Floating icon with subtle animation */}
                       <motion.div
-                        className="absolute right-2 bottom-2 opacity-30"
-                        animate={{ 
-                          opacity: [0.2, 0.4, 0.2],
-                          rotate: [0, 5, 0]
+                        className="absolute right-3 bottom-3 opacity-20"
+                        initial={{ opacity: 0, scale: 0.8 }}
+                        animate={isInView ? { 
+                          opacity: 0.2, 
+                          scale: 1,
+                          y: [0, -2, 0]
+                        } : { 
+                          opacity: 0, 
+                          scale: 0.8 
                         }}
-                        transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}
+                        transition={{ 
+                          duration: 4, 
+                          repeat: Infinity, 
+                          ease: "easeInOut",
+                          delay: 0.5 * (index + 1)
+                        }}
                       >
                         {svgIllustrations[index]}
                       </motion.div>
                       
                       <div className="relative z-10 p-6 h-full flex flex-col justify-between backdrop-blur-[2px] rounded-xl transition-all duration-300 hover:backdrop-blur-none">
                         <div className="flex items-center gap-3 mb-3">
-                          <div className={`p-2 rounded-lg ${quadrant.iconBg} ${quadrant.iconColor} shadow-sm`}>
+                          <div className={`p-2 rounded-lg ${quadrant.iconBg} ${quadrant.iconColor} shadow-sm dark:shadow-lg`}>
                             {quadrant.icon}
                           </div>
-                          <h3 className="text-base font-semibold">{quadrant.title}</h3>
+                          <h3 className="text-base font-semibold text-foreground dark:text-slate-100">{quadrant.title}</h3>
                         </div>
                         
                         {quadrant.skills ? (
@@ -440,12 +570,13 @@ export function AboutSection() {
                             {quadrant.skills.map((skill) => (
                               <motion.span 
                                 key={skill} 
-                                className="px-2 py-1 text-xs font-medium rounded-full bg-white/10 backdrop-blur-sm border border-white/5"
+                                className="px-2 py-1 text-xs font-medium rounded-full bg-white/10 dark:bg-slate-700/40 backdrop-blur-sm border border-white/5 dark:border-slate-600/30 transition-all duration-200 light:bg-gradient-to-r light:from-cyan-50/70 light:to-sky-50/70 light:text-slate-700 light:border-cyan-200/60 light:hover:from-cyan-100/80 light:hover:to-sky-100/80 light:shadow-[0_0_0_1px_rgba(14,165,233,0.25),0_2px_6px_-1px_rgba(14,165,233,0.25)]"
                                 whileHover={{ 
-                                  scale: 1.1, 
-                                  backgroundColor: "rgba(var(--primary), 0.2)",
-                                  color: "hsl(var(--primary))",
-                                  transition: { duration: 0.2 }
+                                  scale: 1.05, 
+                                  backgroundColor: "rgba(14, 165, 233, 0.15)",
+                                  color: "hsl(199, 89%, 48%)",
+                                  borderColor: "rgba(14, 165, 233, 0.3)",
+                                  transition: { duration: 0.3, ease: "easeOut" }
                                 }}
                               >
                                 {skill}
@@ -454,24 +585,31 @@ export function AboutSection() {
                           </div>
                         ) : (
                           <div className="mt-auto">
-                            <div className="text-2xl font-bold">{quadrant.years || quadrant.projects}</div>
-                            <div className="text-xs text-muted-foreground">{quadrant.description}</div>
+                            <div className="text-2xl font-bold text-foreground dark:text-slate-100">{quadrant.years || quadrant.projects}</div>
+                            <div className="text-xs text-muted-foreground dark:text-slate-400">{quadrant.description}</div>
                           </div>
                         )}
                       </div>
                       
-                      <div 
-                        className="absolute bottom-0 left-0 right-0 h-2 group-hover:animate-pulse-width z-20"
+                      <motion.div 
+                        className="absolute bottom-0 left-0 right-0 h-1.5 z-20"
+                        initial={{ scaleX: 0 }}
+                        animate={isInView ? { scaleX: 1 } : { scaleX: 0 }}
+                        transition={{ 
+                          duration: 0.8, 
+                          delay: 0.3 * (index + 1),
+                          ease: [0.25, 0.46, 0.45, 0.94]
+                        }}
                         style={{ 
                           backgroundImage: index === 0 
-                            ? 'linear-gradient(to right, hsl(var(--primary)), rgb(168, 85, 247))' 
+                            ? 'linear-gradient(to right, hsl(199, 89%, 48%), rgb(14, 165, 233))' 
                             : index === 1 
-                              ? 'linear-gradient(to right, rgb(59, 130, 246), rgb(79, 70, 229))' 
+                              ? 'linear-gradient(to right, rgb(59, 130, 246), rgb(6, 182, 212))' 
                               : index === 2 
                                 ? 'linear-gradient(to right, rgb(245, 158, 11), rgb(249, 115, 22))' 
                                 : 'linear-gradient(to right, rgb(34, 197, 94), rgb(16, 185, 129))'
                         }}
-                      ></div>
+                      />
                     </motion.div>
                   </div>
                 ))}
@@ -494,45 +632,124 @@ export function AboutSection() {
             </div>
           </motion.div>
 
-          <div className="lg:col-span-6">
+          <motion.div 
+            className="lg:col-span-6"
+            initial={{ opacity: 0, x: 50 }}
+            animate={isInView ? { 
+              opacity: 1, 
+              x: 0,
+              transition: { 
+                duration: 0.8, 
+                delay: 0.5,
+                ease: [0.25, 0.46, 0.45, 0.94]
+              }
+            } : { opacity: 0, x: 50 }}
+          >
             <motion.div 
               className="space-y-8"
-              initial={{ opacity: 0 }}
-              animate={isInView ? { opacity: 1 } : { opacity: 0 }}
-              transition={{ duration: 0.5 }}
+              initial={{ opacity: 0, y: 30 }}
+              animate={isInView ? { 
+                opacity: 1, 
+                y: 0,
+                transition: { 
+                  duration: 0.8, 
+                  delay: 0.7,
+                  ease: [0.25, 0.46, 0.45, 0.94]
+                }
+              } : { opacity: 0, y: 30 }}
             >
-              <div className="flex flex-wrap gap-2">
+              <motion.div 
+                className="flex flex-wrap gap-2"
+                initial={{ opacity: 0, y: 20 }}
+                animate={isInView ? { 
+                  opacity: 1, 
+                  y: 0,
+                  transition: { 
+                    duration: 0.6, 
+                    delay: 0.8,
+                    staggerChildren: 0.1,
+                    ease: [0.25, 0.46, 0.45, 0.94]
+                  }
+                } : { opacity: 0, y: 20 }}
+              >
                 {tabs.map((tab, index) => (
                   <motion.button 
                     key={index}
                     onClick={() => setActiveTab(index)}
                     className={`flex items-center gap-1.5 px-2.5 py-1 text-xs sm:text-sm font-medium rounded-full transition-all ${
                       activeTab === index 
-                        ? 'bg-primary text-primary-foreground shadow-md' 
-                        : 'bg-primary/10 hover:bg-primary/15 text-foreground'
+                        ? 'bg-primary text-primary-foreground shadow-md dark:shadow-primary/20' 
+                        : 'bg-primary/10 hover:bg-primary/15 dark:bg-slate-700/50 dark:hover:bg-slate-600/50 text-foreground'
                     }`}
+                    initial={{ opacity: 0, scale: 0.8, y: 10 }}
+                    animate={isInView ? { 
+                      opacity: 1, 
+                      scale: 1, 
+                      y: 0,
+                      transition: { 
+                        duration: 0.5, 
+                        delay: 0.9 + (0.1 * index),
+                        ease: [0.25, 0.46, 0.45, 0.94]
+                      }
+                    } : { opacity: 0, scale: 0.8, y: 10 }}
                     whileHover={{ 
-                      scale: 1.05,
-                      boxShadow: "0 3px 10px rgba(var(--primary), 0.3)",
-                      transition: { duration: 0.2 }
+                      scale: 1.08,
+                      y: -2,
+                      boxShadow: "0 8px 20px rgba(var(--primary), 0.25)",
+                      transition: { 
+                        duration: 0.3,
+                        ease: [0.25, 0.46, 0.45, 0.94]
+                      }
                     }}
-                    whileTap={{ scale: 0.95 }}
+                    whileTap={{ 
+                      scale: 0.95,
+                      transition: { duration: 0.1 }
+                    }}
+                  >
+                    <motion.div
+                      animate={activeTab === index ? { 
+                        rotate: [0, 360],
+                        scale: [1, 1.2, 1]
+                      } : {}}
+                      transition={{ 
+                        duration: 0.6,
+                        ease: "easeInOut"
+                      }}
                   >
                     {tab.icon}
+                    </motion.div>
                     {tab.name}
                   </motion.button>
                 ))}
-              </div>
+              </motion.div>
 
               <motion.div 
-                className="min-h-[100px] bg-primary/5 rounded-xl p-6 border border-primary/10 relative overflow-hidden mt-4 custom-cursor-default"
+                className="min-h-[100px] bg-primary/5 dark:bg-slate-800/30 rounded-xl p-6 border border-primary/10 dark:border-slate-700/50 relative overflow-hidden mt-4 custom-cursor-default"
+                initial={{ opacity: 0, y: 20, scale: 0.95 }}
+                animate={isInView ? { 
+                  opacity: 1, 
+                  y: 0, 
+                  scale: 1,
+                  transition: { 
+                    duration: 0.6, 
+                    delay: 1.0,
+                    ease: [0.25, 0.46, 0.45, 0.94]
+                  }
+                } : { opacity: 0, y: 20, scale: 0.95 }}
                 whileHover={{ 
-                  boxShadow: "0 10px 30px rgba(var(--primary), 0.15)",
-                  borderColor: "rgba(var(--primary), 0.3)",
-                  backgroundColor: "rgba(var(--primary), 0.08)",
-                  transition: { duration: 0.3 }
+                  y: -3,
+                  scale: 1.02,
+                  boxShadow: "0 15px 35px rgba(var(--primary), 0.2)",
+                  borderColor: "#0ea5e94d",
+                  backgroundColor: "#0ea5e914",
+                  transition: { 
+                    duration: 0.4,
+                    ease: [0.25, 0.46, 0.45, 0.94]
+                  }
                 }}
               >
+                {/* Light mode dark accent overlay */}
+                <div className="absolute inset-0 bg-slate-800/6 dark:bg-transparent rounded-xl"></div>
                 <motion.div className="absolute top-0 left-0 h-1 bg-primary" 
                   style={{
                     width: `${100 / tabs.length}%`,
@@ -555,37 +772,55 @@ export function AboutSection() {
               </motion.div>
 
               <motion.div
-                initial="hidden"
-                animate={isInView ? "visible" : "hidden"}
-                variants={{
-                  hidden: { opacity: 0 },
-                  visible: { opacity: 1, transition: { staggerChildren: 0.1 } }
-                }}
+                initial={{ opacity: 0, y: 30 }}
+                animate={isInView ? { 
+                  opacity: 1, 
+                  y: 0,
+                  transition: { 
+                    duration: 0.6, 
+                    delay: 1.2,
+                    staggerChildren: 0.15,
+                    ease: [0.25, 0.46, 0.45, 0.94]
+                  }
+                } : { opacity: 0, y: 30 }}
                 className="grid grid-cols-1 sm:grid-cols-2 gap-3 mt-8 custom-cursor-default"
               >
                 {memoizedItems.map((item, index) => (
                   <motion.div
                     key={index}
-                    variants={{
-                      hidden: { opacity: 0, y: 10 },
-                      visible: { opacity: 1, y: 0, transition: { duration: 0.35, type: "tween" } }
-                    }}
+                    initial={{ opacity: 0, y: 20, scale: 0.9 }}
+                    animate={isInView ? { 
+                      opacity: 1, 
+                      y: 0, 
+                      scale: 1,
+                      transition: { 
+                        duration: 0.5, 
+                        delay: 1.3 + (0.1 * index),
+                        ease: [0.25, 0.46, 0.45, 0.94]
+                      }
+                    } : { opacity: 0, y: 20, scale: 0.9 }}
                     whileHover={{
-                      y: -2,
-                      backgroundColor: "rgba(var(--primary), 0.04)",
-                      boxShadow: "0 2px 8px rgba(0,0,0,0.06)",
-                      borderColor: "rgba(var(--primary), 0.15)",
-                      transition: { duration: 0.15, type: "tween" }
+                      y: -5,
+                      scale: 1.02,
+                      backgroundColor: "#0ea5e90a",
+                      boxShadow: "0 8px 20px rgba(var(--primary), 0.12)",
+                      borderColor: "#0ea5e926",
+                      transition: { 
+                        duration: 0.3, 
+                        ease: [0.25, 0.46, 0.45, 0.94]
+                      }
                     }}
                     layout={false}
-                    className="flex items-start gap-2 p-4 rounded-lg border border-white/1 bg-white/5 dark:bg-black/20 backdrop-blur-sm transition-all duration-150 skills-item"
+                    className="flex items-start gap-2 p-4 rounded-lg border border-white/1 dark:border-slate-700/30 bg-white/5 dark:bg-slate-800/25 backdrop-blur-sm transition-all duration-150 skills-item relative"
                   >
-                    <div className="min-w-6 h-6 rounded-full bg-primary/20 flex items-center justify-center mt-0.5">
+                    {/* Light mode dark accent overlay */}
+                    <div className="absolute inset-0 bg-slate-800/4 dark:bg-transparent rounded-lg"></div>
+                    <div className="min-w-6 h-6 rounded-full bg-primary/20 flex items-center justify-center mt-0.5 relative z-10">
                       <svg width="14" height="14" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" className="text-primary">
                         <path d="M20 6L9 17L4 12" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
                       </svg>
                     </div>
-                    <div>
+                    <div className="relative z-10">
                       <h4 className="text-sm sm:text-base font-medium">{item.title}</h4>
                       <p className="text-xs sm:text-sm text-muted-foreground">{item.desc}</p>
                     </div>
@@ -594,9 +829,17 @@ export function AboutSection() {
               </motion.div>
 
               <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
-                transition={{ duration: 0.5, delay: 0.6 }}
+                initial={{ opacity: 0, y: 30, scale: 0.9 }}
+                animate={isInView ? { 
+                  opacity: 1, 
+                  y: 0, 
+                  scale: 1,
+                  transition: { 
+                    duration: 0.6, 
+                    delay: 1.5,
+                    ease: [0.25, 0.46, 0.45, 0.94]
+                  }
+                } : { opacity: 0, y: 30, scale: 0.9 }}
                 className="pt-6 button-wrapper"
               >
                 <motion.button
@@ -609,7 +852,7 @@ export function AboutSection() {
                 >
                   {/* Multi-layered background for the button */}
                   <div className="absolute inset-0 bg-primary rounded-full" />
-                  <div className="absolute inset-0 bg-gradient-to-r from-primary via-purple-500 to-primary rounded-full opacity-80 ultimate-gradient" />
+                  <div className="absolute inset-0 bg-gradient-to-r from-primary via-blue-500 to-primary rounded-full opacity-80 ultimate-gradient" />
                   
                   {/* Particle effects */}
                   <div className="absolute inset-0 overflow-hidden rounded-full">
@@ -701,7 +944,7 @@ export function AboutSection() {
                 </motion.button>
               </motion.div>
             </motion.div>
-          </div>
+          </motion.div>
         </div>
 
       </motion.div>

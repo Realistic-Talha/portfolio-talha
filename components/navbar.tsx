@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button"
 import { Menu, X, Moon, Sun, ChevronRight, ExternalLink, Star, Sparkles } from "lucide-react"
 import { motion, AnimatePresence, useScroll } from "framer-motion"
 import { useTheme } from "next-themes"
+import { useModeAnimation, ThemeAnimationType } from "react-theme-switch-animation"
 
 export function Navbar() {
   const [isScrolled, setIsScrolled] = useState(false)
@@ -22,25 +23,58 @@ export function Navbar() {
   const prevScrollY = useRef(0)
   const [scrollDirection, setScrollDirection] = useState<'up' | 'down'>('up')
 
+  // Theme animation hook for desktop
+  const { ref: themeRef, toggleSwitchTheme } = useModeAnimation({
+    duration: 700,
+    easing: "ease-in-out",
+    animationType: ThemeAnimationType.BLUR_CIRCLE,
+    blurAmount: 2,
+    isDarkMode: theme === "dark",
+    onDarkModeChange: (isDark) => {
+      setTheme(isDark ? "dark" : "light")
+    }
+  })
+
+  // Theme animation hook for mobile
+  const { ref: mobileThemeRef, toggleSwitchTheme: toggleMobileTheme } = useModeAnimation({
+    duration: 700,
+    easing: "ease-in-out", 
+    animationType: ThemeAnimationType.BLUR_CIRCLE,
+    blurAmount: 2,
+    isDarkMode: theme === "dark",
+    onDarkModeChange: (isDark) => {
+      setTheme(isDark ? "dark" : "light")
+    }
+  })
+
   useEffect(() => {
     setMounted(true)
   }, [])
 
   // Prevent body scroll when mobile menu is open (more robust)
   useEffect(() => {
-    if (isMobileMenuOpen) {
-      document.body.style.overflow = "hidden"
-      document.body.style.position = "fixed"
-      document.body.style.width = "100%"
-    } else {
-      document.body.style.overflow = ""
-      document.body.style.position = ""
-      document.body.style.width = ""
+    try {
+      if (isMobileMenuOpen) {
+        document.body.style.overflow = "hidden"
+        document.body.style.position = "fixed"
+        document.body.style.width = "100%"
+      } else {
+        document.body.style.overflow = ""
+        document.body.style.position = ""
+        document.body.style.width = ""
+      }
+    } catch (error) {
+      console.warn('Error managing body scroll:', error);
     }
+    
     return () => {
-      document.body.style.overflow = ""
-      document.body.style.position = ""
-      document.body.style.width = ""
+      try {
+        document.body.style.overflow = ""
+        document.body.style.position = ""
+        document.body.style.width = ""
+      } catch (error) {
+        console.warn('Error resetting body scroll:', error);
+      }
     }
   }, [isMobileMenuOpen])
 
@@ -58,10 +92,14 @@ export function Navbar() {
       setScrollPosition(position)
 
       // Check if we're in the hero section
-      const heroSection = document.getElementById('home')
-      if (heroSection) {
-        const heroBottom = heroSection.getBoundingClientRect().bottom
-        setIsHeroSection(heroBottom > 0)
+      try {
+        const heroSection = document.getElementById('home')
+        if (heroSection) {
+          const heroBottom = heroSection.getBoundingClientRect().bottom
+          setIsHeroSection(heroBottom > 0)
+        }
+      } catch (error) {
+        console.warn('Error checking hero section:', error);
       }
 
       // Set scrolling state to true and reset timer
@@ -93,22 +131,30 @@ export function Navbar() {
     const handleScroll = () => {
       setIsScrolled(window.scrollY > 20)
 
-      const sections = document.querySelectorAll('section[id]')
-      sections.forEach(section => {
-        const sectionTop = (section as HTMLElement).offsetTop - 100
-        const sectionHeight = (section as HTMLElement).offsetHeight
-        if (window.scrollY >= sectionTop && window.scrollY < sectionTop + sectionHeight) {
-          setActiveLink(`#${section.getAttribute('id')}`)
-        }
-      })
+      try {
+        const sections = document.querySelectorAll('section[id]')
+        sections.forEach(section => {
+          const sectionTop = (section as HTMLElement).offsetTop - 100
+          const sectionHeight = (section as HTMLElement).offsetHeight
+          if (window.scrollY >= sectionTop && window.scrollY < sectionTop + sectionHeight) {
+            setActiveLink(`#${section.getAttribute('id')}`)
+          }
+        })
+      } catch (error) {
+        console.warn('Error updating active link:', error);
+      }
     }
 
     window.addEventListener("scroll", handleScroll)
     return () => window.removeEventListener("scroll", handleScroll)
   }, [])
 
-  const toggleTheme = () => {
-    setTheme(theme === "dark" ? "light" : "dark")
+  const toggleTheme = async () => {
+    await toggleSwitchTheme()
+  }
+
+  const toggleMobileThemeHandler = async () => {
+    await toggleMobileTheme()
   }
 
   const navLinks = [
@@ -117,6 +163,7 @@ export function Navbar() {
     { href: "#skills", label: "Skills" },
     { href: "#experience", label: "Experience" },
     { href: "#projects", label: "Projects" },
+    { href: "#testimonials", label: "Testimonials" },
     { href: "#contact", label: "Contact" },
   ]
 
@@ -137,14 +184,16 @@ export function Navbar() {
       <header
         ref={navRef}
         className={`fixed top-4 left-0 right-0 z-50 w-full transition-transform duration-300 ease-in-out ${navbarVisibilityClass}`}
+        suppressHydrationWarning
       >
-        <div className="modern-navbar mx-auto max-w-full md:max-w-4xl">
-          <div className="nav-container">
+        <div className="modern-navbar mx-auto max-w-full md:max-w-5xl xl:max-w-6xl" suppressHydrationWarning>
+          <div className="nav-container flex items-center justify-between w-full px-4 py-2">
             <Link 
               href="/" 
-              className="nav-logo-wrapper"
+              className="nav-logo-wrapper flex-shrink-0"
               onClick={() => setActiveLink("#home")}
               aria-label="Home"
+              suppressHydrationWarning
             >
               <div className="nav-logo">
                 <div className="nav-logo-shine"></div>
@@ -207,8 +256,8 @@ export function Navbar() {
                 </motion.span>
               </div>
             </Link>
-            <nav className="nav-links hidden md:flex" aria-label="Main navigation">
-              <div className="nav-links-track">
+            <nav className="nav-links hidden md:flex flex-1 justify-center" aria-label="Main navigation">
+              <div className="nav-links-track flex items-center gap-1">
                 {navLinks.map((link) => (
                   <Link
                     key={link.href}
@@ -216,6 +265,7 @@ export function Navbar() {
                     onClick={() => setActiveLink(link.href)}
                     className={`nav-link ${activeLink === link.href ? 'nav-active' : ''}`}
                     aria-current={activeLink === link.href ? "page" : undefined}
+                    suppressHydrationWarning
                   >
                     <div className="nav-link-highlight"></div>
                     <motion.span
@@ -250,11 +300,12 @@ export function Navbar() {
                 ))}
               </div>
             </nav>
-            <div className="nav-actions flex items-center">
+            <div className="nav-actions flex items-center gap-2 flex-shrink-0">
               <motion.button
+                ref={themeRef}
                 whileHover={{ 
                   scale: 1.1, 
-                  backgroundColor: "rgba(var(--primary), 0.15)" 
+                  backgroundColor: "rgba(147, 51, 234, 0.15)" 
                 }}
                 whileTap={{ scale: 0.9 }}
                 className="nav-theme-toggle optimize-animation"
@@ -320,7 +371,7 @@ export function Navbar() {
               <motion.div
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
-                className="nav-resume-wrapper optimize-animation hidden sm:block"
+                className="nav-resume-wrapper optimize-animation hidden lg:block"
               >
                 <Button 
                   size="sm" 
@@ -328,7 +379,7 @@ export function Navbar() {
                   className="nav-resume-btn"
                   asChild
                 >
-                  <Link href="/resume.pdf" target="_blank" rel="noopener noreferrer">
+                  <Link href="/resume.pdf" target="_blank" rel="noopener noreferrer" suppressHydrationWarning>
                     <span className="relative z-10">Resume</span>
                     <motion.div
                       animate={{ x: [0, 3, 0] }}
@@ -345,7 +396,7 @@ export function Navbar() {
                     </motion.div>
                     <span className="nav-resume-shine"></span>
                     <motion.div
-                      className="absolute inset-0 bg-gradient-to-r from-primary/80 to-purple-600/80 rounded-full opacity-0 -z-10 nav-liquid-gradient optimize-animation"
+                      className="absolute inset-0 bg-gradient-to-r from-primary/80 to-blue-600/80 rounded-full opacity-0 -z-10 nav-liquid-gradient optimize-animation"
                       initial={{ x: "-100%" }}
                       whileHover={{ x: 0, opacity: 0.15 }}
                       transition={{ duration: 0.5 }}
@@ -470,6 +521,7 @@ export function Navbar() {
                             setIsMobileMenuOpen(false)
                           }}
                           aria-current={activeLink === link.href ? "page" : undefined}
+                          suppressHydrationWarning
                         >
                           <div className="nav-mobile-link-content">
                             <div className="nav-mobile-dot"></div>
@@ -501,10 +553,10 @@ export function Navbar() {
                       className="w-full nav-mobile-resume group"
                       asChild
                     >
-                      <Link href="/resume.pdf" target="_blank" rel="noopener noreferrer">
+                      <Link href="/resume.pdf" target="_blank" rel="noopener noreferrer" suppressHydrationWarning>
                         <span className="relative z-10">View Resume</span>
                         <motion.div
-                          className="absolute inset-0 bg-gradient-to-r from-primary/80 via-purple-600/80 to-primary/80 rounded-lg opacity-90 -z-0 optimize-animation"
+                          className="absolute inset-0 bg-gradient-to-r from-primary/80 via-blue-600/80 to-primary/80 rounded-lg opacity-90 -z-0 optimize-animation"
                           initial={{ x: "-100%" }}
                           whileHover={{ x: 0 }}
                           transition={{ duration: 0.3 }}
@@ -514,7 +566,8 @@ export function Navbar() {
                     </Button>
                     <div className="flex justify-center mt-5">
                       <button
-                        onClick={toggleTheme}
+                        ref={mobileThemeRef}
+                        onClick={toggleMobileThemeHandler}
                         className="nav-theme-toggle-mobile"
                         suppressHydrationWarning
                       >

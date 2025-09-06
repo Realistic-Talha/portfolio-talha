@@ -27,7 +27,7 @@ export default function FaviconGenerator() {
     ctx.rotate(Math.PI / 4) // 45 degrees in radians
     
     // Draw the rotated square (primary color with 80% opacity)
-    ctx.fillStyle = 'rgba(139, 92, 246, 0.8)' // Assuming primary is purple
+    ctx.fillStyle = 'rgba(14, 165, 233, 0.8)' // Using blue theme
     ctx.roundRect(-11, -11, 22, 22, 3) // Rounded square
     ctx.fill()
     
